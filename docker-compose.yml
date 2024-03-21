@@ -6,10 +6,12 @@ services:
     build:
       context: ./t2m-frontend
       dockerfile: Dockerfile
+    environment:
+      - NEXT_PUBLIC_API_URL=
     command: npm run start
 
-  nginx-frontend:
-    container_name: nginx-frontend
+  nginx:
+    container_name: nginx
     build:
       context: ./nginx
       dockerfile: Dockerfile
