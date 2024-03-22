@@ -85,8 +85,6 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
   }, [authInfo?.user?.email, authInfo?.access_token]);
   const authState = !!authInfo?.user?._id && limitState
 
-  console.log(authState)
-
   const dispatch = useAppDispatch();
 
   const showLogout = authState ? true : false

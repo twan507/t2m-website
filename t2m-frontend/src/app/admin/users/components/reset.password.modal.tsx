@@ -31,9 +31,9 @@ const ResetPasswordModal = (props: IProps) => {
 
     //Hàm kiểm tra password
     const validatePassword = async (_: RuleObject, value: string) => {
-        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
         if (value && !passwordRegex.test(value)) {
-            throw new Error('Mật khẩu phải dài tối thiểu 6 kí tự, bao gồm cả ký tự in hoa và chữ số.');
+            throw new Error('Mật khẩu tối thiểu 6 kí tự, bao gồm chữ in hoa và chữ số.');
         }
     };
 
@@ -102,11 +102,11 @@ const ResetPasswordModal = (props: IProps) => {
                         label="Mật khẩu mới"
                         name="newPassword"
                         rules={[
-                            { required: true, message: 'Mật khẩu không được để trống!' },
+
                             { validator: validatePassword }
                         ]}
                     >
-                        <Input.Password placeholder="Mật khẩu phải dài tối thiểu 6 kí tự, bao gồm cả ký tự in hoa và chữ số." />
+                        <Input.Password placeholder="Mật khẩu tối thiểu 6 kí tự, bao gồm chữ in hoa và chữ số." />
                     </Form.Item>
 
                     <Form.Item

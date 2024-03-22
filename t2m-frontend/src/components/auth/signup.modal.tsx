@@ -90,11 +90,12 @@ const AuthSignUpModal = (props: IProps) => {
 
     //Hàm kiểm tra mật khẩu
     const validatePassword = async (_: RuleObject, value: string) => {
-        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
         if (value && !passwordRegex.test(value)) {
-            throw new Error('Mật khẩu phải dài tối thiểu 6 kí tự, bao gồm cả ký tự in hoa và chữ số.');
+            throw new Error('Mật khẩu tối thiểu 6 kí tự, bao gồm chữ in hoa và chữ số.');
         }
     };
+
 
     //Hàm kiểm tra confirm password
     const validatePasswordsMatch = async (_: RuleObject, value: string) => {
@@ -134,8 +135,10 @@ const AuthSignUpModal = (props: IProps) => {
 
     const prefixSelector = (
         <Form.Item name="prefix" noStyle >
-            <Select style={{ width: 95 }}>
-                <Select.Option value=""><img src="/photo/flag.png" alt="flag" style={{ height: '20px', marginBottom: '-5px' }} />&nbsp;+84</Select.Option>
+            <Select style={{ width: 95 }} dropdownStyle={{ backgroundColor: "#333333" }}>
+                <Select.Option value=""><img src="/photo/flag.png" alt="flag" style={{ height: '20px', marginBottom: '-5px' }} />
+                    <span style={{ color: "#dfdfdf" }}>&nbsp;+84</span>
+                </Select.Option>
             </Select>
         </Form.Item>
     );
@@ -156,6 +159,53 @@ const AuthSignUpModal = (props: IProps) => {
           .custom-modal .ant-modal-wrap {
             background-color: transparent !important;
           }
+
+          .ant-input {
+            background-color: #333333;
+            border: 0px;
+            color: #dfdfdf;
+          }
+
+          .ant-input::addonBefore {
+            background-color: #333333;
+            border: 0px;
+            color: #dfdfdf;
+          }
+
+          .ant-input-password input {
+            background-color: #333333;
+            color: #dfdfdf
+          }
+
+          .ant-input-password {
+            background-color: #333333;
+            border: 0px;
+          }
+
+          .ant-input::placeholder {
+            color: #666666;
+          }
+
+          .ant-input-password input::placeholder {
+            color: #666666;
+          }
+
+          .ant-input-group .ant-input-group-addon {
+            background-color: #333333;
+            color: #dfdfdf;
+            border-color: #333333;
+          }
+          
+          .ant-input-group .ant-input-group-addon + .ant-input-affix-wrapper .ant-input,
+          .ant-input-group .ant-input-group-addon + input {
+            border-color: #333333; /* Màu viền đen */
+            color: #dfdfdf;
+          }
+
+            .ant-select-item-option-active, .ant-select-item-option-selected {
+            background-color: #333333 !important;
+            }
+
         `}
             </style>
             <Modal
@@ -226,7 +276,7 @@ const AuthSignUpModal = (props: IProps) => {
                         label={<span style={{ fontSize: 16, fontWeight: 'bold', color: '#dfdfdf' }}> Số điện thoại</span>}
                         name="phoneNumber"
                         rules={[
-                            { required: true, message: 'Xác nhận mật khẩu không được để trống!' },
+                            { required: true, message: 'Số điện thoại không được để trống!' },
                             { validator: validatePhoneNumber }
                         ]}
                     >
@@ -238,7 +288,7 @@ const AuthSignUpModal = (props: IProps) => {
                         label={<span style={{ fontSize: 16, fontWeight: 'bold', color: '#dfdfdf' }}>Mật khẩu</span>}
                         name="password"
                         rules={[
-                            { required: true, message: 'Please input your password!' },
+                            { required: true, message: 'Mật khẩu không được để trống!' },
                             { validator: validatePassword }
                         ]}
                     >
@@ -250,7 +300,7 @@ const AuthSignUpModal = (props: IProps) => {
                         label={<span style={{ fontSize: 16, fontWeight: 'bold', color: '#dfdfdf' }}> Xác nhận mật khẩu</span>}
                         name="confirmPassword"
                         rules={[
-                            { required: true, message: 'Mật khẩu không được để trống!' },
+
                             { validator: validatePasswordsMatch }
                         ]}
                     >
@@ -267,7 +317,7 @@ const AuthSignUpModal = (props: IProps) => {
                     </Form.Item>
 
                     <Form.Item style={{ display: 'flex', justifyContent: 'center', alignItems: 'middle', marginBottom: '0px', marginTop: '10px' }}>
-                        <p style={{ fontSize: 13, color: '#dfdfdf',fontStyle: 'italic' }}>
+                        <p style={{ fontSize: 13, color: '#dfdfdf', fontStyle: 'italic' }}>
                             Với việc bấm đăng ký, bạn đã đọc và đồng ý với &nbsp;
                             <Typography.Link
                                 onClick={() => { }}

@@ -24,7 +24,7 @@ const ChangePasswordModal = (props: IProps) => {
 
     //Hàm kiểm tra password
     const validatePassword = async (_: RuleObject, value: string) => {
-        const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
         if (value && !passwordRegex.test(value)) {
             throw new Error('Tối thiểu 6 kí tự, bao gồm cả ký tự in hoa và chữ số.');
         }
@@ -146,7 +146,7 @@ const ChangePasswordModal = (props: IProps) => {
                         label={<span style={{ fontSize: 16, fontWeight: 'bold', color: '#dfdfdf' }}>Mật khẩu cũ</span>}
                         name="currentPassword"
                         rules={[
-                            { required: true, message: 'Mật khẩu không được để trống!' },
+
                             { validator: validatePassword }
                         ]}
                     >
@@ -158,7 +158,7 @@ const ChangePasswordModal = (props: IProps) => {
                         label={<span style={{ fontSize: 16, fontWeight: 'bold', color: '#dfdfdf' }}>Mật khẩu mới</span>}
                         name="newPassword"
                         rules={[
-                            { required: true, message: 'Mật khẩu không được để trống!' },
+
                             { validator: validatePassword }
                         ]}
                     >

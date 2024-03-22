@@ -49,6 +49,17 @@ const AuthSignInModal = (props: IProps) => {
         <>
             <style>
                 {`
+
+            .ant-input:-webkit-autofill,
+            .ant-input:-webkit-autofill:hover, 
+            .ant-input:-webkit-autofill:focus, 
+            .ant-input:-webkit-autofill:active{
+                -webkit-background-clip: text !important;
+                -webkit-text-fill-color: #dfdfdf !important;
+                -webkit-box-shadow: 0 0 0 30px #333333 inset !important;
+                transition: background-color 5000s ease-in-out 0s;
+            }
+
           .custom-modal .ant-modal-content {
             background-color: transparent !important;
             box-shadow: none !important;
@@ -61,6 +72,25 @@ const AuthSignInModal = (props: IProps) => {
           .custom-modal .ant-modal-wrap {
             background-color: transparent !important;
           }
+
+          .ant-input-password input {
+            background-color: #333333;
+            color: #dfdfdf
+          }
+
+          .ant-input-password {
+            background-color: #333333;
+            border: 0px;
+          }
+          
+          .ant-input::placeholder {
+            color: #666666;
+          }
+
+          .ant-input-password input::placeholder {
+            color: #666666;
+          }
+
         `}
             </style>
             <AuthSignUpModal
@@ -109,18 +139,18 @@ const AuthSignInModal = (props: IProps) => {
                     <Form.Item<FieldType>
                         label={<span style={{ fontSize: 16, fontWeight: 'bold', color: '#dfdfdf' }}>Email</span>}
                         name="username"
-                        rules={[{ required: true, message: 'Please input your username!' }]}
+                        rules={[{ required: true, message: 'Email đăng nhập không được để trống!' }]}
                     >
-                        <Input size='large' />
+                        <Input size='large' placeholder="Nhập email của bạn." />
                     </Form.Item>
 
                     <Form.Item<FieldType>
                         label={<span style={{ fontSize: 16, fontWeight: 'bold', color: '#dfdfdf' }}>Mật khẩu</span>}
                         name="password"
-                        rules={[{ required: true, message: 'Please input your password!' }]}
+                        rules={[{ required: true, message: 'Mật khẩu không được để trống!' }]}
                         style={{ marginBottom: '5px' }}
                     >
-                        <Input.Password size='large' />
+                        <Input.Password size='large' placeholder="Nhập mật khẩu của bạn." />
                     </Form.Item>
 
                     <Form.Item style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px', marginTop: '5px', marginRight: '-15px' }}>
