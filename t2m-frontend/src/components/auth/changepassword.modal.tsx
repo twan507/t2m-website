@@ -26,7 +26,7 @@ const ChangePasswordModal = (props: IProps) => {
     const validatePassword = async (_: RuleObject, value: string) => {
         const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
         if (value && !passwordRegex.test(value)) {
-            throw new Error('Tối thiểu 6 kí tự, bao gồm cả ký tự in hoa và chữ số.');
+            throw new Error('Mật khẩu tối thiểu 6 kí tự, bao gồm cả ký tự in hoa và chữ số.');
         }
     };
 
@@ -101,6 +101,33 @@ const ChangePasswordModal = (props: IProps) => {
       .custom-modal .ant-modal-wrap {
         background-color: transparent !important;
       }
+
+      .custom-modal .ant-input {
+        background-color: #333333;
+        border: 0px;
+        color: #dfdfdf;
+      }
+
+      .custom-modal .ant-input-password input {
+        background-color: #333333;
+        color: #dfdfdf
+      }
+
+      .custom-modal .ant-input-password {
+        background-color: #333333;
+        border: 0px;
+      }
+
+      .custom-modal .ant-input::placeholder {
+        color: #666666;
+      }
+
+      .custom-modal .ant-input-password input::placeholder {
+        color: #666666;
+      }
+
+
+
     `}
             </style>
             <ForgetPasswordModal
@@ -146,7 +173,7 @@ const ChangePasswordModal = (props: IProps) => {
                         label={<span style={{ fontSize: 16, fontWeight: 'bold', color: '#dfdfdf' }}>Mật khẩu cũ</span>}
                         name="currentPassword"
                         rules={[
-
+                            { required: true, message: 'Mật khẩu không được để trống!' },
                             { validator: validatePassword }
                         ]}
                     >
@@ -158,7 +185,7 @@ const ChangePasswordModal = (props: IProps) => {
                         label={<span style={{ fontSize: 16, fontWeight: 'bold', color: '#dfdfdf' }}>Mật khẩu mới</span>}
                         name="newPassword"
                         rules={[
-
+                            { required: true, message: 'Mật khẩu không được để trống!' },
                             { validator: validatePassword }
                         ]}
                     >

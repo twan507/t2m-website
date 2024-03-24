@@ -102,7 +102,7 @@ const ResetPasswordModal = (props: IProps) => {
                         label="Mật khẩu mới"
                         name="newPassword"
                         rules={[
-
+                            { required: true, message: 'Mật khẩu không được để trống!' },
                             { validator: validatePassword }
                         ]}
                     >

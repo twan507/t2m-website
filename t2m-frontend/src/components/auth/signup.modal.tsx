@@ -160,49 +160,37 @@ const AuthSignUpModal = (props: IProps) => {
             background-color: transparent !important;
           }
 
-          .ant-input {
+          .custom-modal .ant-input {
             background-color: #333333;
             border: 0px;
             color: #dfdfdf;
           }
 
-          .ant-input::addonBefore {
-            background-color: #333333;
-            border: 0px;
-            color: #dfdfdf;
-          }
-
-          .ant-input-password input {
+          .custom-modal .ant-input-password input {
             background-color: #333333;
             color: #dfdfdf
           }
 
-          .ant-input-password {
+          .custom-modal .ant-input-password {
             background-color: #333333;
             border: 0px;
           }
 
-          .ant-input::placeholder {
+          .custom-modal .ant-input::placeholder {
             color: #666666;
           }
 
-          .ant-input-password input::placeholder {
+          .custom-modal .ant-input-password input::placeholder {
             color: #666666;
           }
 
-          .ant-input-group .ant-input-group-addon {
+          .custom-modal .ant-input-group .ant-input-group-addon {
             background-color: #333333;
             color: #dfdfdf;
             border-color: #333333;
           }
-          
-          .ant-input-group .ant-input-group-addon + .ant-input-affix-wrapper .ant-input,
-          .ant-input-group .ant-input-group-addon + input {
-            border-color: #333333; /* Màu viền đen */
-            color: #dfdfdf;
-          }
 
-            .ant-select-item-option-active, .ant-select-item-option-selected {
+          .custom-modal .ant-select-item-option-active, .ant-select-item-option-selected {
             background-color: #333333 !important;
             }
 
