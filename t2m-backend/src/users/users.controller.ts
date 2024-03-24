@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AdminChangePasswordDto, ChangePasswordDto, CreateUserDto, ForgetPasswordDto, SendPasswordTokenDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -23,9 +23,10 @@ export class UsersController {
   }
 
   @Post('change-password')
+  @SkipCheckPermission()
   changePassword(
     @Body() changePasswordDto: ChangePasswordDto,
-    @User() user: IUser
+    @User() user: IUser,
   ) {
     return this.usersService.changePassword(changePasswordDto, user)
   }
