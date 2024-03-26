@@ -10,6 +10,7 @@ import { ProductsService } from 'src/products/products.service';
 import { UsersService } from 'src/users/users.service';
 import { User, UserDocument } from 'src/users/schemas/user.schemas';
 import { MailService } from 'src/mail/mail.service';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class LicensesService {
@@ -93,8 +94,8 @@ export class LicensesService {
       endDate, daysLeft,
       userEmail,
       product,
-      discountCode,
-      discountPercent,
+      discountCode: discountCode ?? "",
+      discountPercent: discountPercent ?? "",
       finalPrice,
       accessLevel: foundProduct.accessLevel,
       permissions: foundProduct.permissions,
@@ -116,6 +117,38 @@ export class LicensesService {
       createdAt: newLicense?.createdAt
     }
   }
+
+  async extend(id: string, monthExtend: number, price: number, user: IUser) {
+
+    const foundLicense = await this.licenseModel.findOne({ _id: new mongoose.Types.ObjectId(id) })
+    const newEndDate = new Date(foundLicense.endDate.setMonth(foundLicense.endDate.getMonth() + monthExtend));
+    const newDaysLeft = (newEndDate.getTime() - foundLicense.startDate.getTime()) / (1000 * 60 * 60 * 24)
+
+    await this.licenseModel.updateOne(
+      { _id: id },
+      {
+        $set: {
+          endDate: newEndDate,
+          daysLeft: newDaysLeft,
+          finalPrice: foundLicense.finalPrice + price,
+          updatedBy: {
+            _id: user._id,
+            email: user.email
+          }
+        },
+        $push: {
+          durationLog: {
+            setDate: new Date(),
+            monthExtend: monthExtend,
+            newEndDate: newEndDate,
+            price: price,
+          }
+        }
+      }
+    )
+    return 'ok'
+  }
+
 
   async findAll(currentPage: number, limit: number, qs: string) {
     const { filter, sort, population } = aqp(qs);
@@ -155,11 +188,20 @@ export class LicensesService {
       .populate({ path: "permissions", select: { _id: 1, apiPath: 1, name: 1, method: 1, module: 1 } })
   }
 
-  async update(id: string, updateLicenseDto: UpdateLicenseDto, user: IUser) {
+  async update(id: string, body: any, user: IUser) {
+    const { product, discountCode, discountPercent, monthAdjust, priceAdjust } = body
+
+    const foundLicense = await this.licenseModel.findOne({ _id: new mongoose.Types.ObjectId(id) })
+    const newEndDate = new Date(foundLicense.endDate.setMonth(foundLicense.endDate.getMonth() + monthAdjust));
+    const newDaysLeft = (newEndDate.getTime() - foundLicense.startDate.getTime()) / (1000 * 60 * 60 * 24)
+
     return await this.licenseModel.updateOne(
       { _id: id },
       {
-        ...updateLicenseDto,
+        product, discountCode, discountPercent,
+        endDate: newEndDate,
+        daysLeft: newDaysLeft,
+        finalPrice: priceAdjust,
         updatedBy: {
           _id: user._id,
           email: user.email

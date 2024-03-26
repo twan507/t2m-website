@@ -348,6 +348,26 @@ export const INIT_PERMISSIONS = [
         }
     },
     {
+        "_id": "65bc7f7c9aa984cfa2de7ecf",
+        "name": "Create a License",
+        "apiPath": "/api/v1/licenses/extend",
+        "method": "POST",
+        "module": "LICENSES",
+        "createdBy": {
+            "_id": "65bc76897e9d32d76d997a48",
+            "email": "admin@t2m.vn"
+        },
+        "isDeleted": false,
+        "deletedAt": null,
+        "createdAt": "2023-06-15T06:47:49.369Z",
+        "updatedAt": "2023-06-15T06:54:05.131Z",
+        "__v": 0,
+        "updatedBy": {
+            "_id": "65bc76897e9d32d76d997a48",
+            "email": "admin@t2m.vn"
+        }
+    },
+    {
         "_id": "65bc7e890cb7da376d32448a",
         "name": "Delete a Product by ID",
         "apiPath": "/api/v1/products/:id",

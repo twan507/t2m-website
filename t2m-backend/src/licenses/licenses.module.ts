@@ -10,7 +10,6 @@ import { UsersService } from 'src/users/users.service';
 import { Role, RoleSchema } from 'src/roles/schemas/role.schemas';
 import { MailService } from 'src/mail/mail.service';
 import { MulterModule } from '@nestjs/platform-express';
-import { MulterConfigService } from './multer.config';
 
 @Global()
 @Module({
@@ -20,11 +19,7 @@ import { MulterConfigService } from './multer.config';
       { name: Product.name, schema: ProductSchema },
       { name: User.name, schema: UserSchema },
       { name: Role.name, schema: RoleSchema },
-    ]),
-    MulterModule.registerAsync({
-      useClass: MulterConfigService,
-    })
-  ],
+    ])],
   controllers: [LicensesController],
   providers: [LicensesService, ProductsService, UsersService, MailService],
   exports: [LicensesService]

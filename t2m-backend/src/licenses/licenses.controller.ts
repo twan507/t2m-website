@@ -20,12 +20,19 @@ export class LicensesController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('imageConfirm'))
   create(
     @Body() createLicenseDto: CreateLicenseDto,
     @User() user: IUser,
   ) {
     return this.licensesService.create(createLicenseDto, user);
+  }
+
+  @Post('extend')
+  extend(
+    @Body() body: { id: string, monthExtend: number, price: number },
+    @User() user: IUser,
+  ) {
+    return this.licensesService.extend(body.id, body.monthExtend, body.price, user);
   }
 
   @Get()
@@ -45,8 +52,12 @@ export class LicensesController {
 
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateLicenseDto: UpdateLicenseDto, @User() user: IUser) {
-    return this.licensesService.update(id, updateLicenseDto, user);
+  update(
+    @Param('id') id: string,
+    @Body() body: { product: string, discountCode: string, discountPercent: number, monthAdjust: number, priceAdjust: number},
+    @User() user: IUser
+  ) {
+    return this.licensesService.update(id, body, user);
   }
 
   @Patch(':id')

@@ -250,8 +250,7 @@ const PageProducts: React.FC = () => {
       dataIndex: 'price',
       ...getColumnSearchProps('price'),
       render: (text) => {
-        // Chuyển đổi số thành chuỗi có dấu phẩy phân cách hàng nghìn và thêm đơn vị đồng
-        return text.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+        return text?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
       },
     },
     {

@@ -135,7 +135,7 @@ const AuthSignUpModal = (props: IProps) => {
 
     const prefixSelector = (
         <Form.Item name="prefix" noStyle >
-            <Select style={{ width: 95 }} dropdownStyle={{ backgroundColor: "#333333" }}>
+            <Select style={{ width: 95 }} open={false} >
                 <Select.Option value=""><img src="/photo/flag.png" alt="flag" style={{ height: '20px', marginBottom: '-5px' }} />
                     <span style={{ color: "#dfdfdf" }}>&nbsp;+84</span>
                 </Select.Option>
@@ -190,9 +190,9 @@ const AuthSignUpModal = (props: IProps) => {
             border-color: #333333;
           }
 
-          .custom-modal .ant-select-item-option-active, .ant-select-item-option-selected {
+          .custom-modal .ant-select-item-option-active {
             background-color: #333333 !important;
-            }
+            } 
 
         `}
             </style>
@@ -209,8 +209,6 @@ const AuthSignUpModal = (props: IProps) => {
                     form={form}
                     layout='vertical'
                     style={{
-                        // maxWidth: '600px',
-                        // minWidth: '570px',
                         width: '100%',
                         padding: '10px 30px 10px 30px',
                         boxSizing: 'border-box', // Đảm bảo padding và border không làm tăng kích thước tổng thể của Form
