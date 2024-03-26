@@ -100,6 +100,12 @@ export class LicensesService {
       accessLevel: foundProduct.accessLevel,
       permissions: foundProduct.permissions,
       isActive: true,
+      durationLog: [{
+        setDate: new Date(),
+        monthExtend: foundProduct.monthsDuration,
+        newEndDate: endDate,
+        price: finalPrice,
+      }],
       createdBy: {
         _id: user._id,
         email: user.email
