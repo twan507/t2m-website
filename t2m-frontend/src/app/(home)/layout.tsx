@@ -77,11 +77,12 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
   const [limitState, setLimitState] = useState(false);
   const authInfo = useAppSelector((state) => state.auth)
   useEffect(() => {
-    const fetchSessionLimit = async () => {
-      const result = await sessionLimit(authInfo?.user?.email, authInfo?.access_token);
-      setLimitState(result);
-    }
-    fetchSessionLimit();
+    (async () => {
+      const limitState = await sessionLimit(authInfo?.user?.email, authInfo?.access_token);
+      if (!limitState) { dispatch(resetAuthState()) }
+      setLimitState(limitState);
+    })()
+    console.log(authInfo)
   }, [authInfo?.user?.email, authInfo?.access_token]);
   const authState = !!authInfo?.user?._id && limitState
 

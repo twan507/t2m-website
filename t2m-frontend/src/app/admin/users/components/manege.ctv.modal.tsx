@@ -32,7 +32,7 @@ const ManageCTVModal = (props: IProps) => {
     }, [isCTVModalOpen])
 
 
-    const validateSponsorsCode = (_: RuleObject, value: any) => {
+    const validateCTVCode = (_: RuleObject, value: any) => {
         // Định nghĩa biểu thức chính quy cho mã giới thiệu
         const regex = /^[A-Z0-9]{6}$/;
 
@@ -40,7 +40,7 @@ const ManageCTVModal = (props: IProps) => {
         if (updateUserRecord.role === 'T2M USER') {
             // Kiểm tra xem mã có đúng định dạng không
             if (!value || !regex.test(value)) {
-                return Promise.reject(new Error('Mã CTV phải có 6 kí tự, chỉ bao gồm chữ số và kí tự in hoa.'));
+                return Promise.reject(new Error('Mã CTV phải có 6 kí tự, bao gồm chữ số và kí tự in hoa.'));
             }
             return Promise.resolve()
         } else {
@@ -130,7 +130,7 @@ const ManageCTVModal = (props: IProps) => {
                         style={{ marginBottom: "5px" }}
                         name="ctvCode"
                         label="Mã CTV"
-                        rules={[{ validator: validateSponsorsCode }]}
+                        rules={[{ validator: validateCTVCode }]}
                     >
                         <Input placeholder={ctvCodePlaceHolder} style={{ width: "100%" }} />
                     </Form.Item>

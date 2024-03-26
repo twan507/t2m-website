@@ -102,14 +102,14 @@ const UpdateLicenseModal = (props: IProps) => {
         setIsUpdateModalOpen(false)
     }
 
-    const validateProductName = async (_: RuleObject, value: string) => {
+    const validateProductNameExist = async (_: RuleObject, value: string) => {
         const productRegex = /^[A-Z0-9]{1,10}$/;
         if (value && !productRegex.test(value.split('@')[0])) {
-            throw new Error('Tên sản phẩm không đúng định dạng. Tối đa 10 kí tự bao gồm chữ hoa hoặc số.');
+            throw new Error('Tên sản phẩm không đúng định dạng, tối đa 10 kí tự bao gồm chữ hoa hoặc số.');
         }
 
         if (value && !validProduct.includes(value)) {
-            throw new Error('Sản phẩm không tồn tại!');
+            throw new Error('Tên sản phẩm không tồn tại!');
         }
 
         // Nếu email hợp lệ và tồn tại trong danh sách, trả về Promise.resolve
@@ -170,7 +170,7 @@ const UpdateLicenseModal = (props: IProps) => {
                         name="product"
                         rules={[
                             { required: true, message: 'Tên sản phẩm không được để trống!' },
-                            { validator: validateProductName }
+                            { validator: validateProductNameExist }
                         ]}
                     >
                         <Input onChange={(e) => getFinalPrice(e.target.value)} placeholder="Nhập tên sản phẩm" />

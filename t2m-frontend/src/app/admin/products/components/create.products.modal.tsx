@@ -54,7 +54,7 @@ const CreatProductModal = (props: IProps) => {
     const validateProductName = async (_: RuleObject, value: string) => {
         const productRegex = /^[A-Z0-9]{1,10}$/;
         if (value && !productRegex.test(value.split('@')[0])) {
-            throw new Error('Email không đúng định dạng. Tối đa 10 kí tự bao gồm chữ hoa hoặc số.');
+            throw new Error('Tên sản phẩm không đúng định dạng, tối đa 10 kí tự bao gồm chữ hoa hoặc số.');
         }
     };
     const [checkAuth, setCheckAuth] = useState(true);

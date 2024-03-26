@@ -106,7 +106,7 @@ const CreatLicenseModal = (props: IProps) => {
     };
 
     //Hàm kiểm tra email xem có tồn tại không
-    const validateEmail = async (_: RuleObject, value: any) => {
+    const validateEmailExist = async (_: RuleObject, value: any) => {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
         // Kiểm tra định dạng email
@@ -268,7 +268,7 @@ const CreatLicenseModal = (props: IProps) => {
                         name="userEmail"
                         rules={[
                             { required: true, message: 'Email người dùng không được để trống!' },
-                            { validator: validateEmail }
+                            { validator: validateEmailExist }
                         ]}
                     >
                         <Input placeholder="Nhập tên sản phẩm" />

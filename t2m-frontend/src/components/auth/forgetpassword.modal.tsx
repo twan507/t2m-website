@@ -183,7 +183,13 @@ const ForgetPasswordModal = (props: IProps) => {
       .custom-modal .ant-input-password input::placeholder {
         color: #666666;
       }
+      .custom-modal .ant-input-password-icon {
+        color: #999999 !important;
+      }          
 
+      .custom-modal .ant-input-password-icon:hover {
+        color: #dfdfdf !important;
+      }
 
     `}
             </style>

@@ -73,22 +73,30 @@ const AuthSignInModal = (props: IProps) => {
             background-color: transparent !important;
           }
 
-          .ant-input-password input {
+          .custom-modal .ant-input-password input {
             background-color: #333333;
             color: #dfdfdf
           }
 
-          .ant-input-password {
+          .custom-modal .ant-input-password {
             background-color: #333333;
             border: 0px;
           }
           
-          .ant-input::placeholder {
+          .custom-modal .ant-input::placeholder {
             color: #666666;
           }
 
-          .ant-input-password input::placeholder {
+          .custom-modal .ant-input-password input::placeholder {
             color: #666666;
+          }
+
+          .custom-modal .ant-input-password-icon {
+            color: #999999 !important;
+          }          
+
+          .custom-modal .ant-input-password-icon:hover {
+            color: #dfdfdf !important;
           }
 
         `}

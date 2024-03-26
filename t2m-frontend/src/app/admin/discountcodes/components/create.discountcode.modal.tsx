@@ -51,10 +51,10 @@ const CreatDiscountCodeModal = (props: IProps) => {
         setIsCreateModalOpen(false)
     }
 
-    const validateDiscountCodeName = async (_: RuleObject, value: string) => {
+    const validateDiscountCode = async (_: RuleObject, value: string) => {
         const DiscountCodeRegex = /^[A-Z0-9]{6}$/;
         if (value && !DiscountCodeRegex.test(value.split('@')[0])) {
-            throw new Error('Mã không đúng định dạng. Tối đa 6 kí tự bao gồm chữ hoa hoặc số.');
+            throw new Error('Mã không đúng định dạng, tối đa 6 kí tự bao gồm chữ in hoa hoặc số.');
         }
     };
 
@@ -93,7 +93,7 @@ const CreatDiscountCodeModal = (props: IProps) => {
                         name="code"
                         rules={[
                             { required: true, message: 'Mã giảm giá không được để trống!' },
-                            { validator: validateDiscountCodeName }
+                            { validator: validateDiscountCode }
                         ]}
                     >
                         <Input placeholder="Nhập mã giảm giá" />
