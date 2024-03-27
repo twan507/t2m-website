@@ -41,7 +41,10 @@ export class MulterConfigService implements MulterOptionsFactory {
                         const month = String(currentDate.getMonth() + 1).padStart(2, '0');
                         const year = currentDate.getFullYear();
 
-                        return day + month + year;
+                        const hours = String(currentDate.getHours()).padStart(2, '0');
+                        const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+
+                        return day + month + year +'(' + hours + minutes +')';
                     }
 
                     let extName = path.extname(file.originalname);

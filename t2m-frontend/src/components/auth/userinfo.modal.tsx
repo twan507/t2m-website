@@ -33,7 +33,7 @@ const UserInfoModal = (props: IProps) => {
     }
 
     useEffect(() => {
-        getUser()
+        if (authState) { getUser() }
     }, [isUserInfoModal])
 
     useEffect(() => {

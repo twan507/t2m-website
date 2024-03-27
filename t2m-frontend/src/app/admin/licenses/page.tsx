@@ -14,9 +14,9 @@ import {
 
 import CreatLicenseModal from './components/create.licenses.modal';
 import UpdateLicenseModal from './components/update.licenses.modal';
-import ImageLicenseModal from './components/show.images.modal';
 import { useRouter } from 'next/navigation';
 import { useAppSelector } from '@/redux/store';
+import DetailLicenseModal from './components/detail.license.modal';
 
 
 interface DataType {
@@ -56,7 +56,7 @@ const PageLicenses: React.FC = () => {
   const [listUsers, setListUsers] = useState([])
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-  const [isImageModalOpen, setIsImageModalOpen] = useState(false)
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
   const [updateLicenseRecord, setUpdateLicenseRecord] = useState()
 
@@ -303,21 +303,22 @@ const PageLicenses: React.FC = () => {
       },
     },
     {
-      title: 'Hình ảnh',
-      render: (value, record) => <Button type='primary' ghost size='small'
-        onClick={() => {
-          setIsImageModalOpen(true)
-          setUpdateLicenseRecord(record)
-        }}
-      >
-        Show
-      </Button>
-    },
-    {
       title: 'Người tạo',
       dataIndex: 'createdBy',
       ...getColumnSearchProps('createdBy'),
       render: (value: any, record) => value?.email
+    },
+    {
+      title: 'Thông tin gia hạn',
+      align: 'center',
+      render: (value, record) => <Button type='primary' ghost size='small'
+        onClick={() => {
+          setIsDetailModalOpen(true)
+          setUpdateLicenseRecord(record)
+        }}
+      >
+        Chi tiết
+      </Button>
     },
     {
       title: 'Trạng thái',
@@ -399,9 +400,10 @@ const PageLicenses: React.FC = () => {
           updateLicenseRecord={updateLicenseRecord}
         />
 
-        <ImageLicenseModal
-          isImageModalOpen={isImageModalOpen}
-          setIsImageModalOpen={setIsImageModalOpen}
+        <DetailLicenseModal
+          getData={getData}
+          isDetailModalOpen={isDetailModalOpen}
+          setIsDetailModalOpen={setIsDetailModalOpen}
           updateLicenseRecord={updateLicenseRecord}
         />
 

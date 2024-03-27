@@ -1,11 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFile, Put } from '@nestjs/common';
 import { CreateLicenseDto } from './dto/create-license.dto';
-import { UpdateLicenseDto } from './dto/update-license.dto';
 import { Public, ResponseMessage, User } from 'src/decorator/customize';
 import { IUser } from 'src/users/users.interface';
 import { LicensesService } from './licenses.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('licenses')
 export class LicensesController {
@@ -33,6 +31,14 @@ export class LicensesController {
     @User() user: IUser,
   ) {
     return this.licensesService.extend(body.id, body.monthExtend, body.price, user);
+  }
+
+  @Post('undo-extend')
+  undoExtend(
+    @Body() body: { id: string },
+    @User() user: IUser,
+  ) {
+    return this.licensesService.undoExtend(body.id, user);
   }
 
   @Get()

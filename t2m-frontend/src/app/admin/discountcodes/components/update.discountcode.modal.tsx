@@ -1,7 +1,7 @@
 'use client'
 import { useAppSelector } from '@/redux/store';
 import { sendRequest } from '@/utlis/api';
-import { Modal, Input, notification, Form, Select, Button, InputNumber } from 'antd';
+import { Modal, Input, notification, Form, Select } from 'antd';
 import { RuleObject } from 'antd/es/form';
 import { useEffect, useState } from 'react';
 const { Option } = Select;
@@ -48,7 +48,7 @@ const UpdateDiscountCodeModal = (props: IProps) => {
         if (res.data) {
             await getData()
             notification.success({
-                message: "Cập nhật thông tin sản phẩm thành công"
+                message: "Cập nhật thông tin mã giảm giá thành công"
             })
             handleClose()
         } else {

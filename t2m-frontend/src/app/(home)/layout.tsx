@@ -82,7 +82,6 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
       if (!limitState) { dispatch(resetAuthState()) }
       setLimitState(limitState);
     })()
-    console.log(authInfo)
   }, [authInfo?.user?.email, authInfo?.access_token]);
   const authState = !!authInfo?.user?._id && limitState
 

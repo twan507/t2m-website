@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 interface IProps {
     isImageModalOpen: boolean
     setIsImageModalOpen: (v: boolean) => void
+    detailLicenseRecord: any
     updateLicenseRecord: any
 }
 
@@ -16,7 +17,7 @@ const ImageLicenseModal = (props: IProps) => {
     const authInfo = useAppSelector((state) => state.auth)
     const authState = !!authInfo?.user?._id
 
-    const { isImageModalOpen, setIsImageModalOpen, updateLicenseRecord } = props
+    const { isImageModalOpen, setIsImageModalOpen, detailLicenseRecord, updateLicenseRecord } = props
     const [imageUrl, setImageUrl] = useState('')
 
     function convertToDDMMYYYY(isoString: string): string {
@@ -24,7 +25,11 @@ const ImageLicenseModal = (props: IProps) => {
         const day = date.getDate().toString().padStart(2, '0');
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const year = date.getFullYear();
-        return `${day}${month}${year}`;
+
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+
+        return `${day}${month}${year}(${hours}${minutes})`;
     }
 
     const handleClose = () => {
@@ -33,25 +38,27 @@ const ImageLicenseModal = (props: IProps) => {
     }
 
     const getImage = async () => {
+        console.log(`${updateLicenseRecord.userEmail}-${convertToDDMMYYYY(detailLicenseRecord.setDate)}`)
         const res = await sendRequest<IBackendRes<any>>({
             url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/files`,
             method: "GET",
             headers: { 'Authorization': `Bearer ${authInfo.access_token}` },
             queryParams: {
-                fileName: `${updateLicenseRecord.userEmail}-${convertToDDMMYYYY(updateLicenseRecord.startDate)}`,
+                fileName: `${updateLicenseRecord.userEmail}-${convertToDDMMYYYY(detailLicenseRecord.setDate)}`,
                 module: 'licenses'
             },
             responseType: 'blob'
         })
+
         //@ts-ignore
         try { setImageUrl(URL.createObjectURL(res)) } catch (error) { }
     }
 
     useEffect(() => {
-        if (updateLicenseRecord) {
+        if (detailLicenseRecord) {
             getImage()
         }
-    }, [updateLicenseRecord])
+    }, [isImageModalOpen])
 
     const [checkAuth, setCheckAuth] = useState(true);
 

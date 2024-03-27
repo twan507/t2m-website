@@ -105,6 +105,7 @@ export class LicensesService {
         monthExtend: foundProduct.monthsDuration,
         newEndDate: endDate,
         price: finalPrice,
+        extendedBy: user.email,
       }],
       createdBy: {
         _id: user._id,
@@ -148,11 +149,43 @@ export class LicensesService {
             monthExtend: monthExtend,
             newEndDate: newEndDate,
             price: price,
+            extendedBy: user.email
           }
         }
       }
     )
     return 'ok'
+  }
+
+  async undoExtend(id: string, user) {
+    const foundLicense = await this.licenseModel.findOne({ _id: new mongoose.Types.ObjectId(id) })
+    const logLength = foundLicense.durationLog.length
+    const lastExtend: any = foundLicense.durationLog[logLength - 1]
+
+    if (logLength > 0) {
+      const newEndDate = new Date(foundLicense.endDate.setMonth(foundLicense.endDate.getMonth() - lastExtend.monthExtend));
+      const newDaysLeft = (newEndDate.getTime() - foundLicense.startDate.getTime()) / (1000 * 60 * 60 * 24)
+      return await this.licenseModel.updateOne(
+        { _id: id }, // Sử dụng bộ lọc phù hợp để tìm tài liệu bạn muốn cập nhật
+        {
+          $set: {
+            endDate: newEndDate,
+            daysLeft: newDaysLeft,
+            finalPrice: foundLicense.finalPrice - lastExtend.price,
+            updatedBy: {
+              _id: user._id,
+              email: user.email
+            }
+          },
+          $pop: {
+            durationLog: 1 // Xóa phần tử cuối cùng trong mảng durationLog
+          }
+        }
+      )
+    } else {
+      throw new BadRequestException(`Không có gia hạn nào đã thực hiện`)
+    }
+
   }
 
 

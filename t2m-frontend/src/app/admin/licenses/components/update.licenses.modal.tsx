@@ -72,12 +72,11 @@ const UpdateLicenseModal = (props: IProps) => {
             headers: { 'Authorization': `Bearer ${authInfo.access_token}` },
             body: data
         })
-        console.log(res)
 
         if (res.data) {
             await getData()
             notification.success({
-                message: "Cập nhật thông tin sản phẩm thành công"
+                message: "Cập nhật sản phẩm thành công"
             })
             handleClose()
         } else {
