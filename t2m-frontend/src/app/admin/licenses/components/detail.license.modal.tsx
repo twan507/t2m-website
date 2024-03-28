@@ -1,10 +1,11 @@
 'use client'
 import { useAppSelector } from '@/redux/store';
-import { Modal,Button, TableProps, Table } from 'antd';
+import { Modal, Button, TableProps, Table, notification } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import ImageLicenseModal from './show.images.modal';
-import { CaretUpOutlined, DeleteOutlined} from '@ant-design/icons';
+import { CaretUpOutlined, DeleteOutlined } from '@ant-design/icons';
 import ExtendLicenseModal from './extend.license.modal';
+import { sendRequest } from '@/utlis/api';
 
 interface IProps {
     getData: any
@@ -24,6 +25,29 @@ const DetailLicenseModal = (props: IProps) => {
     const [isImageModalOpen, setIsImageModalOpen] = useState(false)
     const [isExtendModalOpen, setIsExtendModalOpen] = useState(false)
     const [detailLicenseRecord, setDetailLicenseRecord] = useState(false)
+
+    const undoExtend = async () => {
+
+        const res = await sendRequest<IBackendRes<any>>({
+            url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/licenses/undo-extend`,
+            method: "POST",
+            headers: { 'Authorization': `Bearer ${authInfo.access_token}` },
+            body: { id: updateLicenseRecord._id }
+        })
+
+        if (res.data) {
+            await getData()
+            setIsDetailModalOpen(false)
+            notification.success({
+                message: "Xoá gia hạn License thành công"
+            })
+        } else {
+            notification.error({
+                message: "Có lỗi xảy ra",
+                description: res.message
+            })
+        }
+    };
 
     const columns: TableProps<any>['columns'] = [
         {
@@ -74,7 +98,6 @@ const DetailLicenseModal = (props: IProps) => {
 
 
     const [checkAuth, setCheckAuth] = useState(true);
-
     useEffect(() => {
         setCheckAuth(false)
     }, []);
@@ -89,9 +112,12 @@ const DetailLicenseModal = (props: IProps) => {
                     detailLicenseRecord={detailLicenseRecord}
                     updateLicenseRecord={updateLicenseRecord}
                 />
-                 <ExtendLicenseModal
+                <ExtendLicenseModal
+                    getData={getData}
                     isExtendModalOpen={isExtendModalOpen}
                     setIsExtendModalOpen={setIsExtendModalOpen}
+                    updateLicenseRecord={updateLicenseRecord}
+                    setIsDetailModalOpen={setIsDetailModalOpen}
                 />
 
                 <style>
@@ -106,7 +132,6 @@ const DetailLicenseModal = (props: IProps) => {
                     title="Lịch sử gia hạn License"
                     open={isDetailModalOpen}
                     onCancel={() => setIsDetailModalOpen(false)}
-                    maskClosable={false}
                     footer={false}
                     style={{ minWidth: "800px" }}
                 >
@@ -120,7 +145,7 @@ const DetailLicenseModal = (props: IProps) => {
                         </Button>
                         <Button
                             icon={<DeleteOutlined />} danger
-                            onClick={() => { }}
+                            onClick={() => undoExtend()}
                             style={{ fontSize: 14, height: 'auto' }}
                         >
                             Xoá gia hạn cuối

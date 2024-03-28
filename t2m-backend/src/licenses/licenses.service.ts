@@ -132,7 +132,7 @@ export class LicensesService {
     const newDaysLeft = (newEndDate.getTime() - foundLicense.startDate.getTime()) / (1000 * 60 * 60 * 24)
 
     await this.licenseModel.updateOne(
-      { _id: id },
+      { _id: new mongoose.Types.ObjectId(id) },
       {
         $set: {
           endDate: newEndDate,
@@ -162,11 +162,11 @@ export class LicensesService {
     const logLength = foundLicense.durationLog.length
     const lastExtend: any = foundLicense.durationLog[logLength - 1]
 
-    if (logLength > 0) {
+    if (logLength > 1) {
       const newEndDate = new Date(foundLicense.endDate.setMonth(foundLicense.endDate.getMonth() - lastExtend.monthExtend));
       const newDaysLeft = (newEndDate.getTime() - foundLicense.startDate.getTime()) / (1000 * 60 * 60 * 24)
       return await this.licenseModel.updateOne(
-        { _id: id }, // Sử dụng bộ lọc phù hợp để tìm tài liệu bạn muốn cập nhật
+        { _id: new mongoose.Types.ObjectId(id) }, // Sử dụng bộ lọc phù hợp để tìm tài liệu bạn muốn cập nhật
         {
           $set: {
             endDate: newEndDate,
@@ -183,7 +183,7 @@ export class LicensesService {
         }
       )
     } else {
-      throw new BadRequestException(`Không có gia hạn nào đã thực hiện`)
+      throw new BadRequestException(`Không thể xoá kì hạn đầu tiên`)
     }
 
   }

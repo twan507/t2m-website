@@ -8,8 +8,11 @@ import { useEffect, useState } from 'react';
 const { Option } = Select;
 
 interface IProps {
+    getData: any
     isExtendModalOpen: boolean
     setIsExtendModalOpen: (v: boolean) => void
+    updateLicenseRecord: any
+    setIsDetailModalOpen: any
 }
 
 const ExtendLicenseModal = (props: IProps) => {
@@ -17,45 +20,39 @@ const ExtendLicenseModal = (props: IProps) => {
     const authInfo = useAppSelector((state) => state.auth)
     const authState = !!authInfo?.user?._id
 
-    const { isExtendModalOpen, setIsExtendModalOpen } = props
+    const { getData, isExtendModalOpen, setIsExtendModalOpen, updateLicenseRecord, setIsDetailModalOpen } = props
 
     const onFinish = async (values: any) => {
-        const { code, maxDiscount } = values
-        const data = { code, maxDiscount }
+        const { monthExtend, price } = values
+        const data = { id: updateLicenseRecord._id, monthExtend, price }
 
-        // const res = await sendRequest<IBackendRes<any>>({
-        //     url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/discountcodes/${updateDiscountCodeRecord._id}`,
-        //     method: "PUT",
-        //     headers: { 'Authorization': `Bearer ${authInfo.access_token}` },
-        //     body: data
-        // })
+        if (uploadCheck === false) {
+            return notification.error({
+                message: "Có lỗi xảy ra",
+                description: "Chưa tải lên hình ảnh xác thực"
+            })
+        }
 
-        // const res_user = await sendRequest<IBackendRes<any>>({
-        //     url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/find-by-email`,
-        //     method: "POST",
-        //     headers: { 'Authorization': `Bearer ${authInfo.access_token}` },
-        //     body: { email: updateDiscountCodeRecord.userEmail }
-        // })
+        const res = await sendRequest<IBackendRes<any>>({
+            url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/licenses/extend`,
+            method: "POST",
+            headers: { 'Authorization': `Bearer ${authInfo.access_token}` },
+            body: data
+        })
 
-        // await sendRequest<IBackendRes<any>>({
-        //     url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/${res_user.data._id}`,
-        //     method: "PATCH",
-        //     headers: { 'Authorization': `Bearer ${authInfo.access_token}` },
-        //     body: { affiliateCode: updateDiscountCodeRecord.isActive ? code : '' }
-        // })
-
-        // if (res.data) {
-        //     await getData()
-        //     notification.success({
-        //         message: "Cập nhật thông tin mã giảm giá thành công"
-        //     })
-        //     handleClose()
-        // } else {
-        //     notification.error({
-        //         message: "Có lỗi xảy ra",
-        //         description: res.message
-        //     })
-        // }
+        if (res.data) {
+            await getData()
+            setIsDetailModalOpen(false)
+            notification.success({
+                message: "Gia hạn License thành công"
+            })
+            handleClose()
+        } else {
+            notification.error({
+                message: "Có lỗi xảy ra",
+                description: res.message
+            })
+        }
     };
 
     const [form] = Form.useForm()
@@ -63,6 +60,7 @@ const ExtendLicenseModal = (props: IProps) => {
     const handleClose = () => {
         form.resetFields()
         setIsExtendModalOpen(false)
+        setUploadCheck(false)
     }
 
     const validateDiscountCode = async (_: RuleObject, value: string) => {
@@ -77,14 +75,6 @@ const ExtendLicenseModal = (props: IProps) => {
     const uploadImage = async (options: any) => {
         const { file, onSuccess, onError, onProgress } = options
 
-        if (!form.getFieldValue('userEmail')) {
-            onError(new Error('Chưa điền Email người dùng'))
-            return notification.error({
-                message: "Có lỗi xảy ra",
-                description: "Chưa điền Email người dùng"
-            })
-        }
-
         // Tạo một đối tượng FormData mới và thêm file
         const formData = new FormData();
         formData.append('fileUpload', file);
@@ -95,7 +85,7 @@ const ExtendLicenseModal = (props: IProps) => {
                 headers: {
                     'Authorization': `Bearer ${authInfo.access_token}`,
                     'folder_type': 'licenses',
-                    'email': `${form.getFieldValue('userEmail')}`
+                    'email': `${updateLicenseRecord.userEmail}`
                 },
                 body: formData,
             });

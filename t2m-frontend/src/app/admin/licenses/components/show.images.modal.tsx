@@ -34,12 +34,11 @@ const ImageLicenseModal = (props: IProps) => {
 
     const handleClose = () => {
         setIsImageModalOpen(false)
-        setImageUrl('')
     }
 
     const getImage = async () => {
         console.log(`${updateLicenseRecord.userEmail}-${convertToDDMMYYYY(detailLicenseRecord.setDate)}`)
-        const res = await sendRequest<IBackendRes<any>>({
+        const res: any = await sendRequest<IBackendRes<any>>({
             url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/files`,
             method: "GET",
             headers: { 'Authorization': `Bearer ${authInfo.access_token}` },
@@ -49,14 +48,15 @@ const ImageLicenseModal = (props: IProps) => {
             },
             responseType: 'blob'
         })
-
-        //@ts-ignore
         try { setImageUrl(URL.createObjectURL(res)) } catch (error) { }
     }
 
     useEffect(() => {
         if (detailLicenseRecord) {
             getImage()
+        }
+        if (isImageModalOpen) {
+            setImageUrl('')
         }
     }, [isImageModalOpen])
 
