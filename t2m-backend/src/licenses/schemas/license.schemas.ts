@@ -42,6 +42,9 @@ export class License {
     isActive: boolean;
 
     @Prop()
+    orderId: Types.ObjectId
+
+    @Prop()
     durationLog: [];
 
     @Prop({ type: Object })

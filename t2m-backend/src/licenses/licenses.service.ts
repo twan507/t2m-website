@@ -11,6 +11,7 @@ import { UsersService } from 'src/users/users.service';
 import { User, UserDocument } from 'src/users/schemas/user.schemas';
 import { MailService } from 'src/mail/mail.service';
 import mongoose from 'mongoose';
+import { Order } from 'src/orders/schemas/order.schemas';
 
 @Injectable()
 export class LicensesService {
@@ -21,6 +22,9 @@ export class LicensesService {
 
     @InjectModel(User.name)
     private userModel: SoftDeleteModel<UserDocument>,
+
+    @InjectModel(Order.name)
+    private orderModel: SoftDeleteModel<UserDocument>,
 
     private productsService: ProductsService,
     private usersService: UsersService,
@@ -89,6 +93,15 @@ export class LicensesService {
 
     const daysLeft = (endDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
 
+    const order = await this.orderModel.create({
+      type: "Tạo mới",
+      buyer: userEmail,
+      saler: user.email,
+      code: discountCode,
+      price: finalPrice
+    }
+    )
+
     const newLicense = await this.licenseModel.create({
       startDate: new Date(),
       endDate, daysLeft,
@@ -100,12 +113,14 @@ export class LicensesService {
       accessLevel: foundProduct.accessLevel,
       permissions: foundProduct.permissions,
       isActive: true,
+      orderId: order._id,
       durationLog: [{
         setDate: new Date(),
         monthExtend: foundProduct.monthsDuration,
         newEndDate: endDate,
         price: finalPrice,
         extendedBy: user.email,
+        orderId: order._id
       }],
       createdBy: {
         _id: user._id,
@@ -131,6 +146,15 @@ export class LicensesService {
     const newEndDate = new Date(foundLicense.endDate.setMonth(foundLicense.endDate.getMonth() + monthExtend));
     const newDaysLeft = (newEndDate.getTime() - foundLicense.startDate.getTime()) / (1000 * 60 * 60 * 24)
 
+    const order = await this.orderModel.create({
+      type: "Gia hạn",
+      buyer: foundLicense.userEmail,
+      saler: user.email,
+      code: foundLicense.discountCode,
+      price: price
+    }
+    )
+
     await this.licenseModel.updateOne(
       { _id: new mongoose.Types.ObjectId(id) },
       {
@@ -149,7 +173,8 @@ export class LicensesService {
             monthExtend: monthExtend,
             newEndDate: newEndDate,
             price: price,
-            extendedBy: user.email
+            extendedBy: user.email,
+            orderId: order._id
           }
         }
       }
@@ -165,6 +190,10 @@ export class LicensesService {
     if (logLength > 1) {
       const newEndDate = new Date(foundLicense.endDate.setMonth(foundLicense.endDate.getMonth() - lastExtend.monthExtend));
       const newDaysLeft = (newEndDate.getTime() - foundLicense.startDate.getTime()) / (1000 * 60 * 60 * 24)
+
+      //Xoá Order
+      await this.orderModel.softDelete({ _id: new mongoose.Types.ObjectId(lastExtend.orderId) })
+
       return await this.licenseModel.updateOne(
         { _id: new mongoose.Types.ObjectId(id) }, // Sử dụng bộ lọc phù hợp để tìm tài liệu bạn muốn cập nhật
         {
@@ -304,7 +333,12 @@ export class LicensesService {
       { email: foundLicense.userEmail },
       { license: "" }
     )
+
+    //Xoá Order
+    await this.orderModel.softDelete({ _id: foundLicense.orderId })
+
     // Thực hiện soft delete
     return await this.licenseModel.softDelete({ _id: id });
+
   }
 }

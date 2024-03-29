@@ -10,6 +10,7 @@ import { UsersService } from 'src/users/users.service';
 import { Role, RoleSchema } from 'src/roles/schemas/role.schemas';
 import { MailService } from 'src/mail/mail.service';
 import { MulterModule } from '@nestjs/platform-express';
+import { Order, OrderSchema } from 'src/orders/schemas/order.schemas';
 
 @Global()
 @Module({
@@ -19,6 +20,7 @@ import { MulterModule } from '@nestjs/platform-express';
       { name: Product.name, schema: ProductSchema },
       { name: User.name, schema: UserSchema },
       { name: Role.name, schema: RoleSchema },
+      { name: Order.name, schema: OrderSchema },
     ])],
   controllers: [LicensesController],
   providers: [LicensesService, ProductsService, UsersService, MailService],

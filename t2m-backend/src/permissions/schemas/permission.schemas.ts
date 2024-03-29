@@ -17,35 +17,35 @@ export class Permission {
     @Prop()
     module: string;
 
-    @Prop({ type: Object })
-    createdBy: {
-        _id: Types.ObjectId
-        email: string
-    };
+    // @Prop({ type: Object })
+    // createdBy: {
+    //     _id: Types.ObjectId
+    //     email: string
+    // };
 
-    @Prop({ type: Object })
-    updatedBy: {
-        _id: Types.ObjectId
-        email: string
-    };
+    // @Prop({ type: Object })
+    // updatedBy: {
+    //     _id: Types.ObjectId
+    //     email: string
+    // };
 
-    @Prop({ type: Object })
-    deletedBy: {
-        _id: Types.ObjectId
-        email: string
-    };
+    // @Prop({ type: Object })
+    // deletedBy: {
+    //     _id: Types.ObjectId
+    //     email: string
+    // };
 
-    @Prop()
-    createdAt: Date;
+    // @Prop()
+    // createdAt: Date;
 
-    @Prop()
-    updatedAt: Date;
+    // @Prop()
+    // updatedAt: Date;
 
-    @Prop()
-    isDeleted: boolean;
+    // @Prop()
+    // isDeleted: boolean;
 
-    @Prop()
-    deletedAt: Date;
+    // @Prop()
+    // deletedAt: Date;
 }
 
 export const PermissionSchema = SchemaFactory.createForClass(Permission);

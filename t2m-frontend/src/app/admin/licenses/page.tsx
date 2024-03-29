@@ -286,7 +286,7 @@ const PageLicenses: React.FC = () => {
       ...getColumnSearchProps('userEmail'),
     },
     {
-      title: 'Mã giảm giá',
+      title: 'Mã giới thiệu',
       dataIndex: 'discountCode',
       ...getColumnSearchProps('discountCode'),
     },
@@ -296,7 +296,7 @@ const PageLicenses: React.FC = () => {
       render: (value) => `${value}%`
     },
     {
-      title: 'Giá sau giảm',
+      title: 'Tổng giá trị',
       dataIndex: 'finalPrice',
       render: (text) => {
         return text?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });

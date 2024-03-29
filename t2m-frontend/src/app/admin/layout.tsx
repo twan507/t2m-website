@@ -9,7 +9,8 @@ import {
   FileDoneOutlined,
   ProductOutlined,
   FallOutlined,
-  FundViewOutlined
+  FundViewOutlined,
+  ShoppingCartOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Button, Avatar } from 'antd';
 import { sendRequest } from '@/utlis/api';
@@ -124,6 +125,15 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
       ),
       key: 'discountcodes',
       icon: <FallOutlined style={{ fontSize: '18px', marginLeft: '-1px' }} />
+    },
+    {
+      label: (
+        <Link href="/admin/orders">
+          Orders
+        </Link>
+      ),
+      key: 'orders',
+      icon: <ShoppingCartOutlined style={{ fontSize: '18px', marginLeft: '-1px' }} />
     },
   ]
 
@@ -241,7 +251,7 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
                     height: "50px",
                     color: '#dfdfdf',
                     marginLeft: collapsed ? '8px' : '13px',
-                    marginTop: `calc(100vh - 110px - ${5 * 55}px`
+                    marginTop: `calc(100vh - 110px - ${6 * 55}px`
                   }}
                 >
                   {collapsed ? '' : 'Đăng xuất'}

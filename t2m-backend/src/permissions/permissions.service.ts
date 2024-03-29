@@ -25,16 +25,11 @@ export class PermissionsService {
     }
 
     const newPermission = await this.permissionModel.create({
-      name, apiPath, method, module,
-      createdBy: {
-        _id: user._id,
-        email: user.email
-      }
+      name, apiPath, method, module
     })
 
     return {
       _id: newPermission?._id,
-      createdAt: newPermission?.createdAt
     }
   }
 
@@ -80,10 +75,6 @@ export class PermissionsService {
       { _id: id },
       {
         ...updatePermissionDto,
-        updatedBy: {
-          _id: user._id,
-          email: user.email
-        }
       }
     );
   }
@@ -94,16 +85,6 @@ export class PermissionsService {
     if (!foundPermission) {
       throw new BadRequestException("Không tìm thấy Permisison");
     }
-    // Cập nhật thông tin người xóa
-    await this.permissionModel.updateOne(
-      { _id: id },
-      {
-        deletedBy: {
-          _id: user._id,
-          email: user.email,
-        },
-      }
-    );
     // Thực hiện soft delete
     return await this.permissionModel.softDelete({ _id: id });
   }

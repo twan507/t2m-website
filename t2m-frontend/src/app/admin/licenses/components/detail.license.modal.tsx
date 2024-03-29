@@ -51,6 +51,10 @@ const DetailLicenseModal = (props: IProps) => {
 
     const columns: TableProps<any>['columns'] = [
         {
+            title: 'ID đơn hàng',
+            dataIndex: 'orderId',
+        },
+        {
             title: 'Ngày gia hạn',
             dataIndex: 'setDate',
             sorter: (a, b) => new Date(a.setDate).getTime() - new Date(b.setDate).getTime(),
@@ -133,7 +137,7 @@ const DetailLicenseModal = (props: IProps) => {
                     open={isDetailModalOpen}
                     onCancel={() => setIsDetailModalOpen(false)}
                     footer={false}
-                    style={{ minWidth: "800px" }}
+                    style={{ minWidth: "1000px" }}
                 >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: "20px", marginBottom: "20px" }}>
                         <Button
