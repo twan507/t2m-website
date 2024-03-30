@@ -110,21 +110,21 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
     },
     {
       label: (
-        <Link href="/admin/licenses">
-          Licenses
-        </Link>
-      ),
-      key: 'licenses',
-      icon: <FileDoneOutlined style={{ fontSize: '18px', marginLeft: '-1px' }} />,
-    },
-    {
-      label: (
         <Link href="/admin/discountcodes">
           Discount Codes
         </Link>
       ),
       key: 'discountcodes',
       icon: <FallOutlined style={{ fontSize: '18px', marginLeft: '-1px' }} />
+    },
+    {
+      label: (
+        <Link href="/admin/licenses">
+          Licenses
+        </Link>
+      ),
+      key: 'licenses',
+      icon: <FileDoneOutlined style={{ fontSize: '18px', marginLeft: '-1px' }} />,
     },
     {
       label: (

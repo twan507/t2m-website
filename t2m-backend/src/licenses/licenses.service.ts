@@ -318,6 +318,7 @@ export class LicensesService {
     if (foundLicense.isActive) {
       throw new BadRequestException("Không thể xoá License đang được kích hoạt");
     }
+
     // Cập nhật thông tin người xóa
     await this.licenseModel.updateOne(
       { _id: id },
@@ -334,8 +335,12 @@ export class LicensesService {
       { license: "" }
     )
 
-    //Xoá Order
-    await this.orderModel.softDelete({ _id: foundLicense.orderId })
+    // //Xoá Order bao gồm toàn bộ gia hạn
+    await this.orderModel.softDelete({
+      //@ts-ignore
+      _id: { $in: (foundLicense.durationLog).map(item => item.orderId) }
+    });
+
 
     // Thực hiện soft delete
     return await this.licenseModel.softDelete({ _id: id });

@@ -1,6 +1,6 @@
 'use client'
 import { useAppSelector } from '@/redux/store';
-import { Modal, Button, TableProps, Table, notification } from 'antd';
+import { Modal, Button, TableProps, Table, notification, Popconfirm } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import ImageLicenseModal from './show.images.modal';
 import { CaretUpOutlined, DeleteOutlined } from '@ant-design/icons';
@@ -147,13 +147,19 @@ const DetailLicenseModal = (props: IProps) => {
                         >
                             Gia hạn
                         </Button>
-                        <Button
-                            icon={<DeleteOutlined />} danger
-                            onClick={() => undoExtend()}
-                            style={{ fontSize: 14, height: 'auto' }}
-                        >
-                            Xoá gia hạn cuối
-                        </Button>
+                        <Popconfirm
+                            title="Xoá gia hạn cuối cùng?"
+                            onConfirm={() => undoExtend()}
+                            okText="Yes"
+                            cancelText="No">
+                            <Button
+                                icon={<DeleteOutlined />} danger
+                                style={{ fontSize: 14, height: 'auto' }}
+                            >
+                                Xoá gia hạn cuối
+                            </Button>
+                        </Popconfirm>
+
                     </div>
                     <Table
                         className="custom-table"
