@@ -70,7 +70,7 @@ const PageOrders: React.FC = () => {
 
     const handleOnChange = async (current: number, pageSize: number) => {
         const res = await sendRequest<IBackendRes<any>>({
-            url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/discountcodes`,
+            url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/orders`,
             method: "GET",
             queryParams: { current: current, pageSize: pageSize },
             headers: { 'Authorization': `Bearer ${authInfo.access_token}` }

@@ -73,6 +73,10 @@ export class UsersController {
     return this.usersService.findAll(+currentPage, +limit, qs);
   }
 
+  @Get('all')
+  @ResponseMessage("Fetch all Orders")
+  getAll() { return this.usersService.getAll() }
+
   @Get('dependent')
   @ResponseMessage("Fetch list dependent user with paginate")
   findAllDependent(

@@ -6,6 +6,10 @@ import React from 'react';
 import CountUp from 'react-countup';
 import { Col, DatePicker, Row, Space, Statistic } from 'antd';
 import moment, { Moment } from 'moment';
+import { sendRequest } from "@/utlis/api";
+import * as dfd from "danfojs";
+import LineChart from "./components/revenue";
+
 
 
 export default function AdminDashboard() {
@@ -23,12 +27,41 @@ export default function AdminDashboard() {
 
   const formatter: any = (value: number) => <CountUp end={value} separator="," />;
 
-  const data = [
-    { id: 1, name: 'Item 1', date: '2024-03-29T03:27:13.372+00:00' },
-    { id: 2, name: 'Item 2', date: '2024-03-30T03:27:13.372+00:00' },
-  ];
+  const [listUsers, setListUsers] = useState([])
+  const [listOrders, setListOrders] = useState([])
 
-  const [filteredData, setFilteredData] = useState(data);
+  const getUsers = async () => {
+    const res = await sendRequest<IBackendRes<any>>({
+      url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/all`,
+      method: "GET",
+      headers: { 'Authorization': `Bearer ${authInfo.access_token}` }
+    })
+    try { setListUsers(res.data) } catch (error) { }
+  }
+
+  const getOrders = async () => {
+    const res = await sendRequest<IBackendRes<any>>({
+      url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/orders/all`,
+      method: "GET",
+      headers: { 'Authorization': `Bearer ${authInfo.access_token}` }
+    })
+    try { setListOrders(res.data) } catch (error) { }
+  }
+
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
+
+  useEffect(() => {
+    getUsers()
+    getOrders()
+  }, [authState])
+
+  useEffect(() => {
+    setFilteredUsers(listUsers)
+    setFilteredOrders(listOrders)
+  }, [listUsers, listOrders])
+
+  console.log(listOrders)
 
   const handleDateChange = (dates: any) => {
     if (dates) {
@@ -39,18 +72,32 @@ export default function AdminDashboard() {
       const endDate = new Date(end.toISOString());
       endDate.setUTCHours(23, 59, 59, 999);
 
-      const filtered = data.filter(item => {
-        const itemDate = new Date(item.date);
-        // So sánh ngày (đã chuyển đổi sang UTC)
+      const filteredUsers = listUsers.filter((item: any) => {
+        const itemDate = new Date(item.createdAt);
         return itemDate >= startDate && itemDate <= endDate;
       });
-      setFilteredData(filtered);
+
+      const filteredOrders = listUsers.filter((item: any) => {
+        const itemDate = new Date(item.createdAt);
+        return itemDate >= startDate && itemDate <= endDate;
+      });
+
+      setFilteredUsers(filteredUsers);
+      setFilteredOrders(filteredOrders);
     } else {
-      // Nếu không có ngày nào được chọn, hiển thị tất cả dữ liệu
-      setFilteredData(data);
+      setFilteredUsers(listUsers);
+      setFilteredOrders(listOrders);
     }
   };
 
+  const [revenue, setRevenue] = useState(0);
+  useEffect(() => {
+    const total = filteredOrders.reduce((sum, item: any) => {
+      return sum + item.price;
+    }, 0);
+
+    setRevenue(total)
+  }, [filteredOrders])
 
   const [checkAuth, setCheckAuth] = useState(true);
   useEffect(() => {
@@ -61,22 +108,37 @@ export default function AdminDashboard() {
     return (
       <>
         <Row gutter={16}>
-          <Col span={12}>
-            <Statistic title="Active Users" value={112893} formatter={formatter} />
+          <DatePicker.RangePicker onChange={handleDateChange} />
+        </Row>
+        <Row gutter={16}>
+          <Col span={8}>
+            <Statistic title="Số Users" value={filteredUsers.length} formatter={formatter} />
           </Col>
-          <Col span={12}>
-            <Statistic title="Account Balance (CNY)" value={112893} precision={2} formatter={formatter} />
+          <Col span={8}>
+            <Statistic title="Số đơn hàng" value={filteredOrders.length} formatter={formatter} />
+          </Col>
+          <Col span={8}>
+            <Statistic title="Doanh thu" value={revenue} formatter={formatter} />
           </Col>
         </Row>
         <Row gutter={16}>
-          <Space direction="vertical" size={12}>
-            <DatePicker.RangePicker onChange={handleDateChange} />
+          <Col span={12}>
             <ul>
-              {filteredData.map(item => (
-                <li key={item.id}>{item.name} - {moment(item.date).format('YYYY-MM-DD HH:mm:ss')}</li>
+              {filteredUsers.map(item => (
+                //@ts-ignore
+                <li key={item._id}>{item.name} - {moment(item.createdAt).format('YYYY-MM-DD')}</li>
               ))}
             </ul>
-          </Space>
+          </Col>
+          <Col span={12}>
+            <ul>
+              {filteredOrders.map(item => (
+                //@ts-ignore
+                <li key={item._id}>{item.name} - {moment(item.createdAt).format('YYYY-MM-DD')}</li>
+              ))}
+            </ul>
+            <LineChart data={filteredOrders} />
+          </Col>
         </Row>
       </>
     )

@@ -5,8 +5,15 @@ export const CTV_ROLE = "T2M CTV";
 export const INIT_PERMISSIONS = [
     {
         "_id": "6562ab56db6ccf2b1baf343a",
-        "name": "Fetch all orders",
+        "name": "Fetch all orders with paginate",
         "apiPath": "/api/v1/orders",
+        "method": "GET",
+        "module": "ORDERS",
+    },
+    {
+        "_id": "6562ab56db6ccf2b1baf343c",
+        "name": "Fetch all orders",
+        "apiPath": "/api/v1/orders/all",
         "method": "GET",
         "module": "ORDERS",
     },
@@ -276,6 +283,13 @@ export const INIT_PERMISSIONS = [
         "_id": "65bc76894d98e49460224a5f",
         "name": "Fetch all User with paginate",
         "apiPath": "/api/v1/users",
+        "method": "GET",
+        "module": "USERS",
+    },
+    {
+        "_id": "65bc76894d98e49460225a5f",
+        "name": "Fetch all Users",
+        "apiPath": "/api/v1/users/all",
         "method": "GET",
         "module": "USERS",
     },

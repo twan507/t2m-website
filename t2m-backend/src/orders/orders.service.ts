@@ -48,6 +48,11 @@ export class OrdersService {
     }
   }
 
+  async getAll() {
+    return await this.orderModel.find()
+  }
+
+
   findOne(id: number) {
     return `This action returns a #${id} order`;
   }

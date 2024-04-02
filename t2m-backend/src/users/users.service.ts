@@ -92,7 +92,10 @@ export class UsersService {
       await this.discountcodesService.changeActivation(currentId.toString(), user, false)
       return 'ok'
     }
+  }
 
+  async getAll() {
+    return await this.userModel.find().select("-password -tokens")
   }
 
   async adminChangePassword(adminChangePasswordDto: AdminChangePasswordDto, user: IUser) {
