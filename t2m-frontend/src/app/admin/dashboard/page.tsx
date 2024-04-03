@@ -4,11 +4,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import React from 'react';
 import CountUp from 'react-countup';
-import { Col, DatePicker, Row, Space, Statistic } from 'antd';
+import { Card, Col, DatePicker, Row, Space, Statistic } from 'antd';
 import moment, { Moment } from 'moment';
 import { sendRequest } from "@/utlis/api";
 import * as dfd from "danfojs";
-import LineChart from "./components/revenue";
+import RevenueChart from "./components/revenue.chart";
+import UsersChart from "./components/users.chart";
+import OrdersChart from "./components/orders.chart";
 
 
 
@@ -61,7 +63,6 @@ export default function AdminDashboard() {
     setFilteredOrders(listOrders)
   }, [listUsers, listOrders])
 
-  console.log(listOrders)
 
   const handleDateChange = (dates: any) => {
     if (dates) {
@@ -77,7 +78,7 @@ export default function AdminDashboard() {
         return itemDate >= startDate && itemDate <= endDate;
       });
 
-      const filteredOrders = listUsers.filter((item: any) => {
+      const filteredOrders = listOrders.filter((item: any) => {
         const itemDate = new Date(item.createdAt);
         return itemDate >= startDate && itemDate <= endDate;
       });
@@ -95,7 +96,6 @@ export default function AdminDashboard() {
     const total = filteredOrders.reduce((sum, item: any) => {
       return sum + item.price;
     }, 0);
-
     setRevenue(total)
   }, [filteredOrders])
 
@@ -112,32 +112,34 @@ export default function AdminDashboard() {
         </Row>
         <Row gutter={16}>
           <Col span={8}>
-            <Statistic title="Số Users" value={filteredUsers.length} formatter={formatter} />
+            <Card hoverable style={{}}>
+              <Statistic title="Số Users" value={filteredUsers.length} formatter={formatter} />
+            </Card>
           </Col>
-          <Col span={8}>
-            <Statistic title="Số đơn hàng" value={filteredOrders.length} formatter={formatter} />
-          </Col>
-          <Col span={8}>
-            <Statistic title="Doanh thu" value={revenue} formatter={formatter} />
+          <Col span={12}>
+            <Card hoverable style={{ width: '850px', height: '250px' }}>
+              <UsersChart width="800px" height="200px" data={filteredUsers} />
+            </Card>
           </Col>
         </Row>
         <Row gutter={16}>
-          <Col span={12}>
-            <ul>
-              {filteredUsers.map(item => (
-                //@ts-ignore
-                <li key={item._id}>{item.name} - {moment(item.createdAt).format('YYYY-MM-DD')}</li>
-              ))}
-            </ul>
+          <Col span={8}>
+            <Statistic title="Số đơn hàng" value={filteredOrders.length} formatter={formatter} />
           </Col>
           <Col span={12}>
-            <ul>
-              {filteredOrders.map(item => (
-                //@ts-ignore
-                <li key={item._id}>{item.name} - {moment(item.createdAt).format('YYYY-MM-DD')}</li>
-              ))}
-            </ul>
-            <LineChart data={filteredOrders} />
+            <Card hoverable style={{ width: '850px', height: '250px' }}>
+              <OrdersChart width="800px" height="200px" data={filteredOrders} />
+            </Card>
+          </Col>
+        </Row>
+        <Row gutter={16} >
+          <Col span={8}>
+            <Statistic title="Doanh thu" value={revenue} formatter={formatter} />
+          </Col>
+          <Col span={12}>
+            <Card hoverable style={{ width: '850px', height: '250px' }}>
+              <RevenueChart width="800px" height="200px" data={filteredOrders} />
+            </Card>
           </Col>
         </Row>
       </>
