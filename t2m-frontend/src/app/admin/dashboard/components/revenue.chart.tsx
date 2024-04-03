@@ -74,8 +74,8 @@ const RevenueChart: React.FC<LineChartProps> = ({ width, height, data }) => {
         type: 'bar',
         label: 'Doanh thu ngày',
         data: pricesData,
-        borderColor: '#1E7607',
-        backgroundColor: '#1E7607',
+        borderColor: '#1777ff',
+        backgroundColor: '#1777ff',
       }
     ],
   };

@@ -75,8 +75,8 @@ const UsersChart: React.FC<LineChartProps> = ({ width, height, data }) => {
                 type: 'bar',
                 label: 'Tài khoản mở trong ngày',
                 data: pricesData,
-                borderColor: '#1E7607',
-                backgroundColor: '#1E7607',
+                borderColor: '#1777ff',
+                backgroundColor: '#1777ff',
             }
         ],
     };

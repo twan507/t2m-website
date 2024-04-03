@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import React from 'react';
 import CountUp from 'react-countup';
-import { Card, Col, DatePicker, Row, Space, Statistic } from 'antd';
+import { Card, Col, DatePicker, Progress, ProgressProps, Row, Space, Statistic } from 'antd';
 import moment, { Moment } from 'moment';
 import { sendRequest } from "@/utlis/api";
 import * as dfd from "danfojs";
@@ -28,6 +28,15 @@ export default function AdminDashboard() {
   }, [authState, router]);
 
   const formatter: any = (value: number) => <CountUp end={value} separator="," />;
+
+  const formatterVND: any = (value: number) => {
+    const formattedValue = new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+      currencyDisplay: 'symbol'
+    }).format(value);
+    return formattedValue;
+  };
 
   const [listUsers, setListUsers] = useState([])
   const [listOrders, setListOrders] = useState([])
@@ -92,12 +101,30 @@ export default function AdminDashboard() {
   };
 
   const [revenue, setRevenue] = useState(0);
+  const [paidUsers, setPaidUsers] = useState(0);
   useEffect(() => {
-    const total = filteredOrders.reduce((sum, item: any) => {
+    const totalRevenue = filteredOrders.reduce((sum, item: any) => {
       return sum + item.price;
     }, 0);
-    setRevenue(total)
+    setRevenue(totalRevenue)
+
+    const totalPaidUsers = filteredUsers.reduce((sum, item: any) => {
+      if (item.license) {
+        return sum + 1
+      }
+      return sum
+    }, 0);
+
+    setRevenue(totalRevenue)
+    setPaidUsers(totalPaidUsers)
+
   }, [filteredOrders])
+
+  const conicColors: ProgressProps['strokeColor'] = {
+    '0%': '#faa',
+    '50%': '#ffe58f',
+    '100%': '#1E7607',
+  };
 
   const [checkAuth, setCheckAuth] = useState(true);
   useEffect(() => {
@@ -107,41 +134,80 @@ export default function AdminDashboard() {
   if (!checkAuth) {
     return (
       <>
-        <Row gutter={16}>
-          <DatePicker.RangePicker onChange={handleDateChange} />
-        </Row>
-        <Row gutter={16}>
-          <Col span={8}>
+        <Row>
+          <Col span={19}>
+            <h1>Thống kê hiệu quả hoạt động</h1>
+          </Col>
+          <Col span={5}>
             <Card hoverable style={{}}>
-              <Statistic title="Số Users" value={filteredUsers.length} formatter={formatter} />
+              <DatePicker.RangePicker onChange={handleDateChange} />
             </Card>
+          </Col>
+        </Row >
+        <Row gutter={20} style={{ marginTop: '20px' }}>
+          <Col span={12}>
+            <Row gutter={20} style={{ marginBottom: '20px' }}>
+              <Col span={12}>
+                <Card title="Tổng số Users" hoverable style={{}}>
+                  <Statistic value={filteredUsers.length} formatter={formatter} />
+                </Card>
+              </Col>
+              <Col span={12}>
+                <Card title="Số Users trả tiền" hoverable style={{}}>
+                  <Statistic value={paidUsers} formatter={formatter} />
+                </Card>
+              </Col>
+            </Row>
+            <Row style={{ marginBottom: '20px' }}>
+              <Col span={24}>
+                <Card title="Tỉ lệ User trả tiền" hoverable style={{ height: '153px' }}>
+                  <Progress percent={Math.round(paidUsers * 100 / filteredUsers.length)} strokeColor={conicColors} />
+                </Card>
+              </Col>
+            </Row>
+            <Row>
+              <Card title="Tăng trưởng Users" hoverable style={{}}>
+                <UsersChart width="750px" height="210px" data={filteredUsers} />
+              </Card>
+            </Row>
           </Col>
           <Col span={12}>
-            <Card hoverable style={{ width: '850px', height: '250px' }}>
-              <UsersChart width="800px" height="200px" data={filteredUsers} />
-            </Card>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={8}>
-            <Statistic title="Số đơn hàng" value={filteredOrders.length} formatter={formatter} />
-          </Col>
-          <Col span={12}>
-            <Card hoverable style={{ width: '850px', height: '250px' }}>
-              <OrdersChart width="800px" height="200px" data={filteredOrders} />
-            </Card>
-          </Col>
-        </Row>
-        <Row gutter={16} >
-          <Col span={8}>
-            <Statistic title="Doanh thu" value={revenue} formatter={formatter} />
-          </Col>
-          <Col span={12}>
-            <Card hoverable style={{ width: '850px', height: '250px' }}>
-              <RevenueChart width="800px" height="200px" data={filteredOrders} />
-            </Card>
-          </Col>
-        </Row>
+            <Row style={{ marginBottom: '20px' }}>
+              <Card
+                title={
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: "space-between" }}>
+                    <span style={{ marginRight: '10px' }}>Tổng số đơn hàng</span>
+                    <Statistic
+                      value={filteredOrders.length}
+                      formatter={formatter}
+                    />
+                  </div>
+                }
+                hoverable
+                style={{}}
+              >
+                <OrdersChart width="753px" height="210px" data={filteredOrders} />
+              </Card>
+            </Row>
+            <Row>
+              <Card
+                title={
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: "space-between" }}>
+                    <span style={{ marginRight: '10px' }}>Doanh số bán hàng</span>
+                    <Statistic
+                      value={revenue}
+                      formatter={formatterVND}
+                    />
+                  </div>
+                }
+                hoverable
+                style={{}}
+              >
+                <RevenueChart width="753px" height="210px" data={filteredOrders} />
+              </Card>
+            </Row>
+          </Col >
+        </Row >
       </>
     )
   }

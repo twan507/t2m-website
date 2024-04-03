@@ -400,7 +400,7 @@ const PageUsers: React.FC = () => {
           {`
           .custom-table .ant-table-thead > tr > th,
           .custom-table .ant-table-tbody > tr > td {
-            padding: 7px; /* Giảm giá trị padding để các hàng gần nhau hơn */
+            padding: 7px;
           }
         `}
         </style>
