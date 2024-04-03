@@ -10,10 +10,12 @@ import {
   Title,
   Tooltip,
   Legend,
+  LineController,
 } from 'chart.js';
 
 // Đăng ký các thành phần cần thiết từ chart.js
 ChartJS.register(
+  LineController,
   CategoryScale,
   LinearScale,
   PointElement,

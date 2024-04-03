@@ -139,8 +139,8 @@ export default function AdminDashboard() {
             <h1>Thống kê hiệu quả hoạt động</h1>
           </Col>
           <Col span={5}>
-            <Card hoverable style={{}}>
-              <DatePicker.RangePicker onChange={handleDateChange} />
+            <Card hoverable style={{ width: "100%" }}>
+              <DatePicker.RangePicker onChange={handleDateChange} style={{ width: "100%" }} />
             </Card>
           </Col>
         </Row >
@@ -166,8 +166,8 @@ export default function AdminDashboard() {
               </Col>
             </Row>
             <Row>
-              <Card title="Tăng trưởng Users" hoverable style={{}}>
-                <UsersChart width="750px" height="210px" data={filteredUsers} />
+              <Card title="Tăng trưởng Users" hoverable style={{ width: "100%" }}>
+                <UsersChart width="100%" height="210px" data={filteredUsers} />
               </Card>
             </Row>
           </Col>
@@ -184,9 +184,9 @@ export default function AdminDashboard() {
                   </div>
                 }
                 hoverable
-                style={{}}
+                style={{ width: "100%" }}
               >
-                <OrdersChart width="753px" height="210px" data={filteredOrders} />
+                <OrdersChart width="100%" height="210px" data={filteredOrders} />
               </Card>
             </Row>
             <Row>
@@ -201,9 +201,9 @@ export default function AdminDashboard() {
                   </div>
                 }
                 hoverable
-                style={{}}
+                style={{ width: "100%" }}
               >
-                <RevenueChart width="753px" height="210px" data={filteredOrders} />
+                <RevenueChart width="100%" height="210px" data={filteredOrders} />
               </Card>
             </Row>
           </Col >
