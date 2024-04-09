@@ -108,14 +108,7 @@ export default function AdminDashboard() {
     }, 0);
     setRevenue(totalRevenue)
 
-    const totalPaidUsers = filteredUsers.reduce((sum, item: any) => {
-      if (item.license) {
-        return sum + 1
-      }
-      return sum
-    }, 0);
-
-    setRevenue(totalRevenue)
+    const totalPaidUsers = filteredOrders.filter((item: any) => item.type === "Tạo mới").length;
     setPaidUsers(totalPaidUsers)
 
   }, [filteredOrders])
