@@ -8,7 +8,7 @@ import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { compareSync, genSaltSync, hashSync } from 'bcryptjs';
 import aqp from 'api-query-params';
 import { Role, RoleDocument } from 'src/roles/schemas/role.schemas';
-import { USER_ROLE } from 'src/databases/sample';
+import { USER_ROLE } from 'src/databases/role.permissions.init';
 import { MailService } from 'src/mail/mail.service';
 import { DiscountcodesService } from 'src/discountcodes/discountcodes.service';
 
@@ -388,7 +388,7 @@ export class UsersService {
 
   async sendPasswordToken(sendPasswordTokenDto: SendPasswordTokenDto) {
     const token = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
-    const expiresAt = new Date(new Date().getTime() + 60000*5);
+    const expiresAt = new Date(new Date().getTime() + 60000 * 5);
 
     const foundUser = await this.userModel.findOne({ email: sendPasswordTokenDto.email })
     if (foundUser) {

@@ -2,12 +2,14 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { UsersService } from 'src/users/users.service';
-import { ADMIN_ROLE, CTV_ROLE, INIT_PERMISSIONS, USER_ROLE } from './sample';
+import { ADMIN_ROLE, CTV_ROLE, INIT_PERMISSIONS, USER_ROLE } from './role.permissions.init';
 import { Role, RoleDocument } from 'src/roles/schemas/role.schemas';
 import { Permission, PermissionDocument } from 'src/permissions/schemas/permission.schemas';
 import { User, UserDocument } from 'src/users/schemas/user.schemas';
 import { Product, ProductDocument } from 'src/products/schemas/product.schemas';
 import { Discountcode, DiscountcodeDocument } from 'src/discountcodes/schemas/discountcode.schemas';
+import { INIT_USERS } from './users.init';
+import { genSaltSync, hashSync } from 'bcryptjs';
 
 @Injectable()
 export class DatabasesService implements OnModuleInit {
@@ -35,6 +37,7 @@ export class DatabasesService implements OnModuleInit {
 
     async onModuleInit() {
         const isInit = process.env.SHOULD_INIT;
+        const mongoose = require('mongoose')
         if (Boolean(isInit)) {
 
             const countUser = await this.userModel.count({});
@@ -45,6 +48,12 @@ export class DatabasesService implements OnModuleInit {
 
             //create permissions
             if (countPermission === 0) {
+                const init_permissions = INIT_PERMISSIONS
+
+                init_permissions.forEach(function (item) {
+                    item._id = new mongoose.Types.ObjectId()
+                })
+
                 await this.permissionModel.insertMany(INIT_PERMISSIONS);
             }
 
@@ -90,6 +99,20 @@ export class DatabasesService implements OnModuleInit {
                 const adminRole = await this.roleModel.findOne({ name: ADMIN_ROLE })
                 const userRole = await this.roleModel.findOne({ name: USER_ROLE })
                 const ctvRole = await this.roleModel.findOne({ name: CTV_ROLE })
+                const init_users = INIT_USERS
+
+                const getHashPasswordCopy = (password: string) => {
+                    const salt = genSaltSync(10);
+                    const hash = hashSync(password, salt);
+                    return hash;
+                }
+
+                init_users.forEach(function (item) {
+                    item._id = new mongoose.Types.ObjectId()
+                    item.password = getHashPasswordCopy(item.password)
+                    item.role = userRole?.name
+                })
+
                 await this.userModel.insertMany([
                     {
                         _id: "65bc76897e9d32d76d997a48",
@@ -196,7 +219,7 @@ export class DatabasesService implements OnModuleInit {
                             "email": "admin@t2m.vn"
                         }
                     },
-                ])
+                ].concat(init_users))
             }
 
             // create products
@@ -204,8 +227,8 @@ export class DatabasesService implements OnModuleInit {
                 const permissions = await this.productModel.find({}).select("_id");
                 await this.productModel.insertMany([
                     {
-                        _id: "65b8f0ff5c3c9a2d111a5ceb",
-                        name: 'EARLY BIRD',
+                        _id: "65b8f0ff5c3c9a2d111a5ced",
+                        name: 'EARLYBIRD',
                         monthsDuration: 24,
                         accessLevel: 4,
                         price: 0,
