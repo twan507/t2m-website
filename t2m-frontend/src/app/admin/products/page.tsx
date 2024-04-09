@@ -357,7 +357,7 @@ const PageProducts: React.FC = () => {
           {`
           .custom-table .ant-table-thead > tr > th,
           .custom-table .ant-table-tbody > tr > td {
-            padding: 7px;
+            padding: 10px;
           }
         `}
         </style>
@@ -373,7 +373,8 @@ const PageProducts: React.FC = () => {
             total: meta.total,
             showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
             onChange: (current: number, pageSize: number) => { handleOnChange(current, pageSize) },
-            showSizeChanger: true
+            showSizeChanger: true,
+            pageSizeOptions: ['10', `${meta.total}`],
           }}
         />
       </>
