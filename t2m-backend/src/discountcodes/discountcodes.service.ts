@@ -77,7 +77,7 @@ export class DiscountcodesService {
     const foundUser = await this.discountcodeModel.findOne({ userEmail, isActive: true })
 
     //@ts-ignore
-    if (foundCode.code === foundUser.code) {
+    if (foundCode?.code === foundUser?.code) {
       return foundCode._id
     } else {
       throw new BadRequestException(`Sử dụng mã ${foundUser.code} để huỷ tư cách CTV của ${userEmail}`);

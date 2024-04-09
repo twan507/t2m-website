@@ -96,7 +96,7 @@ export class DatabasesService implements OnModuleInit {
                         email: "admin@t2m.vn",
                         password: this.userService.getHashPassword(process.env.INIT_PASSWORD),
                         name: "T2M ADMIN",
-                        affiliateCode: "",
+                        affiliateCode: "ADMT2M",
                         sponsorCode: "",
                         phoneNumber: "0123456789",
                         role: adminRole?.name,
@@ -111,7 +111,7 @@ export class DatabasesService implements OnModuleInit {
                         email: "tradertruongdao@t2m.vn",
                         password: this.userService.getHashPassword(process.env.INIT_PASSWORD),
                         name: "tradertruongdao",
-                        affiliateCode: "VIP001",
+                        affiliateCode: "ADMT2M",
                         sponsorCode: "",
                         phoneNumber: "0888213688",
                         role: adminRole?.name,
@@ -126,7 +126,7 @@ export class DatabasesService implements OnModuleInit {
                         email: "maigt@t2m.vn",
                         password: this.userService.getHashPassword(process.env.INIT_PASSWORD),
                         name: "Mai Mai",
-                        affiliateCode: "VIP002",
+                        affiliateCode: "ADMT2M",
                         sponsorCode: "",
                         phoneNumber: "0973321345",
                         role: adminRole?.name,
@@ -141,7 +141,7 @@ export class DatabasesService implements OnModuleInit {
                         email: "tuanba@t2m.vn",
                         password: this.userService.getHashPassword(process.env.INIT_PASSWORD),
                         name: "Bùi Anh Tuấn",
-                        affiliateCode: "VIP003",
+                        affiliateCode: "ADMT2M",
                         sponsorCode: "",
                         phoneNumber: "0912005777",
                         role: adminRole?.name,
@@ -203,6 +203,19 @@ export class DatabasesService implements OnModuleInit {
             if (countProduct === 0) {
                 const permissions = await this.productModel.find({}).select("_id");
                 await this.productModel.insertMany([
+                    {
+                        _id: "65b8f0ff5c3c9a2d111a5ceb",
+                        name: 'EARLY BIRD',
+                        monthsDuration: 24,
+                        accessLevel: 4,
+                        price: 0,
+                        isActive: true,
+                        permissions: [],
+                        createdBy: {
+                            "_id": "65bc76897e9d32d76d997a48",
+                            "email": "admin@t2m.vn"
+                        }
+                    },
                     {
                         _id: "65b8f0ff5c3c9a2d111a5ceb",
                         name: 'TRIAL',
@@ -276,7 +289,7 @@ export class DatabasesService implements OnModuleInit {
                     {
                         _id: "65ab8fabd66c3811fa2c04d1",
                         userEmail: 'tradertruongdao@t2m.vn',
-                        code: 'VIP001',
+                        code: 'ADMT2M',
                         maxDiscount: 25,
                         type: 'ADMIN',
                         isActive: true,
@@ -288,7 +301,7 @@ export class DatabasesService implements OnModuleInit {
                     {
                         _id: "656ca0a8f38f38fdee1139ec",
                         userEmail: 'maigt@t2m.vn',
-                        code: 'VIP002',
+                        code: 'ADMT2M',
                         maxDiscount: 25,
                         type: 'ADMIN',
                         isActive: true,
@@ -300,7 +313,7 @@ export class DatabasesService implements OnModuleInit {
                     {
                         _id: "655efedb9aec0d54ae553dec",
                         userEmail: 'tuanba@t2m.vn',
-                        code: 'VIP003',
+                        code: 'ADMT2M',
                         maxDiscount: 25,
                         type: 'ADMIN',
                         isActive: true,
