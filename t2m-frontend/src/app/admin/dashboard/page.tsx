@@ -100,8 +100,6 @@ export default function AdminDashboard() {
     }
   };
 
-  console.log(filteredUsers)
-
   const [revenue, setRevenue] = useState(0);
   const [paidUsers, setPaidUsers] = useState(0);
   useEffect(() => {
