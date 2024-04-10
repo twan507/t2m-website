@@ -215,9 +215,11 @@ const UserInfoModal = (props: IProps) => {
                                     >
                                         {authInfo.user.role === "T2M ADMIN" ? "ADMIN" : authInfo.user.licenseInfo?.product ?? 'FREE'}
                                     </div>
-                                    {authInfo.user.licenseInfo?.daysLeft && (
+                                    {(authInfo.user.licenseInfo?.daysLeft && authInfo.user.licenseInfo?.daysLeft < 370) && (
                                         //@ts-ignore
-                                        <div style={{ fontSize: 12, marginTop: 2, marginLeft: '5px', padding: '0px 5px 0px 5px', background: '#A20D0D', borderRadius: 5, width: 'fit-content' }}>{`${authInfo.user.licenseInfo?.daysLeft} days`}</div>
+                                        <div style={{ fontSize: 12, marginTop: 5, marginLeft: '5px', padding: '0px 5px 0px 5px', background: '#A20D0D', borderRadius: 5, width: 'fit-content' }}>
+                                            {`${authInfo.user.licenseInfo?.daysLeft} days`}
+                                        </div>
                                     )}
                                 </div>
                             )}

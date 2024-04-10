@@ -239,11 +239,11 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
               </Avatar>
               {!collapsed && (
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', marginTop: authState ? '-4px' : '3px', marginLeft: authState ? '0px' : '12px' }}>
-                  <div style={{ fontSize: 16, marginTop: -5 }}>{collapsed ? '' : (authState ? getUserName(authInfo.user.name) : 'Đăng nhập')}</div>
+                  <div style={{ fontSize: 15, marginTop: -5 }}>{collapsed ? '' : (authState ? getUserName(authInfo.user.name) : 'Đăng nhập')}</div>
                   {authState && (
                     <div style={{ display: 'flex', marginTop: -3 }} >
                       <div style={{
-                        fontSize: 12, marginTop: 2, padding: '0px 5px 0px 5px',
+                        fontSize: 12, marginTop: 4, padding: '0px 5px 0px 5px',
                         background:
                           authInfo.user.role === "T2M ADMIN" ? '#98217c' : (
                             !authInfo.user.licenseInfo?.accessLevel ? '#404040' : (
@@ -256,9 +256,11 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
                       >
                         {collapsed ? null : authInfo.user.role === "T2M ADMIN" ? "ADMIN" : authInfo.user.licenseInfo?.product ?? 'FREE'}
                       </div>
-                      {authInfo.user.licenseInfo?.daysLeft && (
+                      {(authInfo.user.licenseInfo?.daysLeft && authInfo.user.licenseInfo?.daysLeft < 370) && (
                         //@ts-ignore
-                        <div style={{ fontSize: 12, marginTop: 2, marginLeft: '5px', padding: '0px 5px 0px 5px', background: '#A20D0D', borderRadius: 5, width: 'fit-content' }}>{collapsed ? null : `${authInfo.user.licenseInfo?.daysLeft} days`}</div>
+                        <div style={{ fontSize: 12, marginTop: 4, marginLeft: '5px', padding: '0px 5px 0px 5px', background: '#A20D0D', borderRadius: 5, width: 'fit-content' }}>
+                          {collapsed ? null : `${authInfo.user.licenseInfo?.daysLeft} days`}
+                        </div>
                       )}
                     </div>
                   )}
