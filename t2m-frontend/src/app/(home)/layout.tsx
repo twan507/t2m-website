@@ -115,7 +115,10 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
   const sider_menu = [
     {
       label: (
-        <a onClick={() => { router.push('/tong-quan-thi-truong') }} >
+        <a href="/tong-quan-thi-truong" onClick={(e) => {
+          e.preventDefault(); // Ngăn chặn sự kiện mặc định của thẻ <a>
+          router.push('/tong-quan-thi-truong');
+        }}>
           Tổng quan thị trường
         </a>
       ),
@@ -124,7 +127,8 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
     },
     {
       label: (
-        <a onClick={() => {
+        <a href="/dong-tien-thi-truong" onClick={(e) => {
+          e.preventDefault();
           if (authState) {
             router.push('/dong-tien-thi-truong')
           } else {
@@ -143,7 +147,8 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
     },
     {
       label: (
-        <a onClick={() => {
+        <a href="/dong-tien-nhom-nganh" onClick={(e) => {
+          e.preventDefault();
           if (authState) {
             router.push('/dong-tien-nhom-nganh')
           } else {
@@ -162,7 +167,8 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
     },
     {
       label: (
-        <a onClick={() => {
+        <a href="/bo-loc-co-phieu" onClick={(e) => {
+          e.preventDefault();
           if (authState) {
             router.push('/bo-loc-co-phieu')
           } else {
