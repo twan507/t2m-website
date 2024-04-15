@@ -40,7 +40,7 @@ const TermsAndConditions = () => (
                     Quy định sử dụng
                 </h3>
                 <p style={{ textAlign: 'justify', fontSize: '16px', fontFamily: 'Helvetica Neue, sans-serif' }}>
-                    “Website” là trang web <a href="t2m.vn">www.t2m.vn</a>, bao gồm cả các trang liên kết đối với các sản phẩm và dịch vụ của T2M Invest.                </p>
+                    “Website” là trang web <a href="/">www.t2m.vn</a>, bao gồm cả các trang liên kết đối với các sản phẩm và dịch vụ của T2M Invest.                </p>
                 <p style={{ textAlign: 'justify', fontSize: '16px', fontFamily: 'Helvetica Neue, sans-serif' }}>
                     Tất cả các thông tin, sản phẩm, dịch vụ trên Website bao gồm nhưng không giới hạn mọi hình thức thiết kế, nội dung, âm thanh và hình ảnh đều thuộc quyền sở hữu của T2M Invest, trừ trường hợp do chính T2M Invest công bố khác đi, và được bảo vệ bởi luật bản quyền Việt Nam.
                 </p>
