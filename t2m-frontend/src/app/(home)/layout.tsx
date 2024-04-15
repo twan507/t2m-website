@@ -16,7 +16,6 @@ import {
   UsergroupAddOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Button, Avatar, notification } from 'antd';
-import { sendRequest } from '@/utlis/api';
 import { useRouter } from 'next/navigation';
 import AuthSignInModal from '@/components/auth/signin.modal';
 import AuthSignUpModal from '@/components/auth/signup.modal';
@@ -65,8 +64,9 @@ function getUserName(name: string) {
 }
 
 const Homelayout = ({ children }: React.PropsWithChildren) => {
+
   //@ts-ignore
-  const path = children.props.childProp.segment === "__PAGE__" ? "tong-quan-thi-truong" : children.props.childProp.segment
+  const [path, setPath] = useState(children.props.childProp.segment === "__PAGE__" ? "tong-quan-thi-truong" : children.props.childProp.segment)
 
   const { Sider } = Layout;
 
@@ -110,81 +110,65 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
     return () => {
       window.removeEventListener('resize', toggleMobileLayout);
     };
-  }, []);
+  }, [path]);
+
+  const handleSelect = ({ key }: { key: string }) => {
+    if (key === path) {
+      window.location.reload()
+    } else if (key === 'tong-quan-thi-truong') {
+      router.push('/tong-quan-thi-truong')
+      setPath(key)
+    } else {
+      if (authState) {
+        router.push(`/${key}`)
+        setPath(key)
+      } else {
+        setSignInModalOpen(true)
+        notification.warning({
+          message: "Không có quyền truy cập",
+          description: "Bạn cần đăng nhập để xem nội dung này"
+        })
+      }
+    }
+  }
 
   const sider_menu = [
     {
       label: (
-        <a href="/tong-quan-thi-truong" onClick={(e) => {
-          e.preventDefault(); // Ngăn chặn sự kiện mặc định của thẻ <a>
-          router.push('/tong-quan-thi-truong');
-        }}>
+        <Link href="/tong-quan-thi-truong" onClick={(e) => { e.preventDefault() }}>
           Tổng quan thị trường
-        </a>
+        </Link>
       ),
       key: 'tong-quan-thi-truong',
       icon: <FundViewOutlined style={{ fontSize: '20px', marginLeft: '-1px' }} />
     },
     {
       label: (
-        <a href="/dong-tien-thi-truong" onClick={(e) => {
-          e.preventDefault();
-          if (authState) {
-            router.push('/dong-tien-thi-truong')
-          } else {
-            setSignInModalOpen(true)
-            notification.warning({
-              message: "Không có quyền truy cập",
-              description: "Bạn cần đăng nhập để xem nội dung này"
-            })
-          }
-        }} >
+        <Link href="/dong-tien-thi-truong" onClick={(e) => { e.preventDefault() }} >
           Dòng tiền thị trường
-        </a>
+        </Link>
       ),
       key: 'dong-tien-thi-truong',
       icon: <LineChartOutlined style={{ fontSize: '18px', marginLeft: '-1px' }} />,
     },
     {
       label: (
-        <a href="/dong-tien-nhom-nganh" onClick={(e) => {
-          e.preventDefault();
-          if (authState) {
-            router.push('/dong-tien-nhom-nganh')
-          } else {
-            setSignInModalOpen(true)
-            notification.warning({
-              message: "Không có quyền truy cập",
-              description: "Bạn cần đăng nhập để xem nội dung này"
-            })
-          }
-        }} >
+        <Link href="/dong-tien-nhom-nganh" onClick={(e) => { e.preventDefault() }} >
           Dòng tiền ngành
-        </a>
+        </Link>
       ),
       key: 'dong-tien-nhom-nganh',
       icon: <BarChartOutlined style={{ fontSize: '18px', marginLeft: '-1px' }} />,
     },
     {
       label: (
-        <a href="/bo-loc-co-phieu" onClick={(e) => {
-          e.preventDefault();
-          if (authState) {
-            router.push('/bo-loc-co-phieu')
-          } else {
-            setSignInModalOpen(true)
-            notification.warning({
-              message: "Không có quyền truy cập",
-              description: "Bạn cần đăng nhập để xem nội dung này"
-            })
-          }
-        }} >
+        <Link href="/bo-loc-co-phieu" onClick={(e) => { e.preventDefault() }} >
           Bộ lọc cổ phiếu
-        </a>
+        </Link>
       ),
       key: 'bo-loc-co-phieu',
       icon: <SearchOutlined style={{ fontSize: '18px', marginLeft: '-1px' }} />,
-    },
+    }
   ]
 
   const [checkAuth, setCheckAuth] = useState(true);
@@ -288,7 +272,8 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
               style={{ background: '#000000' }}
               theme="dark"
               mode="inline"
-              defaultSelectedKeys={[path]}
+              selectedKeys={[path]}
+              onClick={handleSelect}
               items={sider_menu}
             />
             <div>
@@ -298,6 +283,7 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
                   icon={<LogoutOutlined />}
                   onClick={async () => {
                     dispatch(resetAuthState())
+                    handleSelect({ key: 'tong-quan-thi-truong' })
                     signOut(authInfo.access_token)
                   }}
                   style={{
@@ -344,7 +330,7 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
                     {
                       label: collapsed ? <Link onClick={() => { window.location.href = "/" }} href='/' /> : null,
                       key: 'home',
-                      icon: collapsed ? <img src="/photo/text-logo.png" alt="Home Icon" style={{ width: '80px', height: '65px', paddingTop: '40px', marginBottom: '16px' }} /> : null
+                      icon: collapsed ? <img src="/photo/text-logo.png" alt="Home Icon" style={{ width: '120px', height: '65px', paddingTop: '40px', marginBottom: '16px' }} /> : null
                     }
                   ] : [
                     {
@@ -359,7 +345,7 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
                           icon={mobileLayout ? <UserOutlined /> : null}
                           style={{
                             width: mobileLayout ? '40px' : '120px',
-                            marginLeft: mobileLayout ? 'calc(100vw - 320px)' : '790px',
+                            marginLeft: mobileLayout ? 'calc(100vw - 360px)' : '790px',
                             fontWeight: 'bold',
                             fontFamily: 'Helvetica Neue, sans-serif'
                           }}>

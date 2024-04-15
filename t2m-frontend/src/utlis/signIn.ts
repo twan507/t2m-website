@@ -11,7 +11,6 @@ export async function signIn(form: any) {
         }
     })
     if (!res?.error) {
-        // window.location.reload()
         notification.success({
             message: "Đăng nhập thành công"
         })

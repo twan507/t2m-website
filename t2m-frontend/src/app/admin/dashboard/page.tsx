@@ -103,12 +103,12 @@ export default function AdminDashboard() {
   const [revenue, setRevenue] = useState(0);
   const [paidUsers, setPaidUsers] = useState(0);
   useEffect(() => {
-    const totalRevenue = filteredOrders.reduce((sum, item: any) => {
+    const totalRevenue = filteredOrders?.reduce((sum, item: any) => {
       return sum + item.price;
     }, 0);
     setRevenue(totalRevenue)
 
-    const totalPaidUsers = filteredOrders.filter((item: any) => item.type === "Tạo mới").length;
+    const totalPaidUsers = filteredOrders?.filter((item: any) => item.type === "Tạo mới").length;
     setPaidUsers(totalPaidUsers)
 
   }, [filteredOrders])
@@ -142,7 +142,7 @@ export default function AdminDashboard() {
             <Row gutter={20} style={{ marginBottom: '20px' }}>
               <Col span={12}>
                 <Card title="Tổng số Users" hoverable style={{}}>
-                  <Statistic value={filteredUsers.length} formatter={formatter} />
+                  <Statistic value={filteredUsers?.length} formatter={formatter} />
                 </Card>
               </Col>
               <Col span={12}>
@@ -154,7 +154,7 @@ export default function AdminDashboard() {
             <Row style={{ marginBottom: '20px' }}>
               <Col span={24}>
                 <Card title="Tỉ lệ User trả tiền" hoverable style={{ height: '153px' }}>
-                  <Progress percent={Math.round(paidUsers * 100 / filteredUsers.length)} strokeColor={conicColors} />
+                  <Progress percent={Math.round(paidUsers * 100 / filteredUsers?.length)} strokeColor={conicColors} />
                 </Card>
               </Col>
             </Row>
@@ -171,7 +171,7 @@ export default function AdminDashboard() {
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: "space-between" }}>
                     <span style={{ marginRight: '10px' }}>Tổng số đơn hàng</span>
                     <Statistic
-                      value={filteredOrders.length}
+                      value={filteredOrders?.length}
                       formatter={formatter}
                     />
                   </div>
