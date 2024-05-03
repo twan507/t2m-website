@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, Modal, Typography, Select, notification } from 'antd';
 import { sendRequest } from '@/utlis/api';
 import { RuleObject } from 'antd/es/form';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 
 interface IProps {
@@ -22,6 +24,7 @@ type FieldType = {
 
 const AuthSignUpModal = (props: IProps) => {
 
+    const router = useRouter()
     const [form] = Form.useForm()
 
     const { isSignUpModalOpen, setSignUpModalOpen } = props
@@ -305,12 +308,15 @@ const AuthSignUpModal = (props: IProps) => {
                     <Form.Item style={{ display: 'flex', justifyContent: 'center', alignItems: 'middle', marginBottom: '0px', marginTop: '10px' }}>
                         <p style={{ fontSize: 13, color: '#dfdfdf', fontStyle: 'italic' }}>
                             Với việc bấm đăng ký, bạn đã đọc và đồng ý với &nbsp;
-                            <Typography.Link
-                                onClick={() => { }}
-                                style={{ fontSize: 14, color: '#1777ff', background: 'transparent', border: 0, padding: 0, fontStyle: 'italic' }}
+                            <Link
+                                href='/terms'
+                                onClick={() => { 
+                                    setSignUpModalOpen(false)
+                                }}
+                                style={{ fontSize: 14, background: 'transparent', border: 0, padding: 0, fontStyle: 'italic' }}
                             >
                                 Điều khoản sử dụng.
-                            </Typography.Link>
+                            </Link>
                         </p>
                     </Form.Item>
 

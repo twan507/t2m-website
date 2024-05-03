@@ -225,8 +225,13 @@ const UserInfoModal = (props: IProps) => {
                             )}
                         </div>
                         {authInfo?.user?.role === "T2M ADMIN" && (
-                            <Button type='primary' style={{ marginLeft: '70px' }} onClick={() => router.push('/admin')}>
-                                ADMIN PORTAL
+                            <Button type='primary' style={{ marginLeft: '70px' }}>
+                                <a href="/admin" onClick={(e) => {
+                                    e.preventDefault();
+                                    router.push('/admin/dashboard')
+                                }} >
+                                    ADMIN PORTAL
+                                </a>
                             </Button>
                         )}
                     </div>

@@ -12,7 +12,7 @@ import {
   FundViewOutlined,
   ShoppingCartOutlined
 } from '@ant-design/icons';
-import { Layout, Menu, Button, Avatar } from 'antd';
+import { Layout, Menu, Button, Avatar, notification } from 'antd';
 import { sendRequest } from '@/utlis/api';
 import { useRouter } from 'next/navigation';
 import AuthSignInModal from '@/components/auth/signin.modal';
@@ -63,13 +63,12 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
   const { Sider } = Layout;
 
   //@ts-ignore
-  const path = children.props.childProp.segment === "__PAGE__" ? "dashboard" : children.props.childProp.segment
+  const [path, setPath] = useState(children.props.childProp.segment === "__PAGE__" ? "dashboard" : children.props.childProp.segment)
 
   const [collapsed, setCollapsed] = useState(true);
 
   const router = useRouter()
 
-  // const { data: authInfo } = useSession()
   const authInfo = useAppSelector((state) => state.auth)
   const authState = !!authInfo?.user?._id
   const dispatch = useAppDispatch();
@@ -80,10 +79,27 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
   const [isSignUpModalOpen, setSignUpModalOpen] = useState(false)
   const [isUserInfoModal, setUserInfoModalOpen] = useState(false)
 
+  const handleSelect = ({ key }: { key: string }) => {
+    if (key === path) {
+      window.location.reload()
+    } else {
+      if (authState) {
+        router.push(`/admin/${key}`)
+        setPath(key)
+      } else {
+        setSignInModalOpen(true)
+        notification.warning({
+          message: "Không có quyền truy cập",
+          description: "Bạn cần đăng nhập để xem nội dung này"
+        })
+      }
+    }
+  }
+
   const sider_menu = [
     {
       label: (
-        <Link href="/admin/dashboard">
+        <Link href="/admin/dashboard" onClick={(e) => { e.preventDefault() }}>
           Dashboard
         </Link>
       ),
@@ -92,7 +108,7 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
     },
     {
       label: (
-        <Link href="/admin/users">
+        <Link href="/admin/users" onClick={(e) => { e.preventDefault() }}>
           Users
         </Link>
       ),
@@ -101,7 +117,7 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
     },
     {
       label: (
-        <Link href="/admin/products">
+        <Link href="/admin/products" onClick={(e) => { e.preventDefault() }}>
           Products
         </Link>
       ),
@@ -110,7 +126,7 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
     },
     {
       label: (
-        <Link href="/admin/discountcodes">
+        <Link href="/admin/discountcodes" onClick={(e) => { e.preventDefault() }}>
           Discount Codes
         </Link>
       ),
@@ -119,7 +135,7 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
     },
     {
       label: (
-        <Link href="/admin/licenses">
+        <Link href="/admin/licenses" onClick={(e) => { e.preventDefault() }}>
           Licenses
         </Link>
       ),
@@ -128,7 +144,7 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
     },
     {
       label: (
-        <Link href="/admin/orders">
+        <Link href="/admin/orders" onClick={(e) => { e.preventDefault() }}>
           Orders
         </Link>
       ),
@@ -172,7 +188,6 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
             <Button
               type="text"
               onClick={() => {
-                // authState ? '' : router.push("/auth/signin")
                 authState ? setUserInfoModalOpen(true) : setSignInModalOpen(true)
               }}
               block={true}
@@ -234,7 +249,8 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
               style={{ background: '#0a0a0a' }}
               theme="dark"
               mode="inline"
-              defaultSelectedKeys={[path]}
+              selectedKeys={[path]}
+              onClick={handleSelect}
               items={sider_menu}
             />
             <div>
@@ -243,6 +259,7 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
                   type="text"
                   icon={<LogoutOutlined />}
                   onClick={() => {
+                    window.location.href = '/admin';
                     signOut(authInfo.access_token)
                     dispatch(resetAuthState())
                   }}
@@ -287,7 +304,7 @@ const AdminLayout = ({ children }: React.PropsWithChildren) => {
                   ...(!authState ? [
                     {
                       label: <Button ghost type='primary' onClick={() => setSignInModalOpen(true)}
-                        style={{ width: '120px', marginLeft: collapsed ? 'calc(100vw - 550px)' : 'calc(100vw - 700px)', fontWeight: 'bold', fontFamily: 'Helvetica Neue, sans-serif' }}
+                        style={{ width: '120px', marginLeft: collapsed ? 'calc(100vw - 570px)' : 'calc(100vw - 710px)', fontWeight: 'bold', fontFamily: 'Helvetica Neue, sans-serif' }}
                       >
                         Đăng nhập
                       </Button>,

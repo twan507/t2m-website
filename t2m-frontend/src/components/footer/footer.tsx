@@ -62,7 +62,7 @@ const FooterComponent = () => {
 
             </div>
             <div className="footer-bottom">
-                <p>© 2023 T2M Invest | <a href="disclaimers.html">Tuyên bố trách nhiệm</a></p>
+                <p>© 2023 T2M Invest | <a href="/terms">Điều khoản sử dụng</a></p>
             </div>
         </footer>
     );
