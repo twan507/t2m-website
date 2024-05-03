@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   DoubleLeftOutlined,
@@ -12,7 +12,9 @@ import {
   BarChartOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  UsergroupAddOutlined
+  UsergroupAddOutlined,
+  ReloadOutlined,
+  AppstoreOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Button, Avatar, notification } from 'antd';
 import { useRouter } from 'next/navigation';
@@ -63,6 +65,46 @@ function getUserName(name: string) {
 }
 
 const Homelayout = ({ children }: React.PropsWithChildren) => {
+
+  const [isAutoReloadEnabled, setIsAutoReloadEnabled] = useState(true); // State to track switch
+  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const resetTimeout = () => {
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current);
+      }
+      timeoutIdRef.current = setTimeout(() => {
+        if (isAutoReloadEnabled) {
+          window.location.reload();
+        }
+      }, 60000);  // 60000 ms = 1 minute
+    };
+
+    // Immediately reset timeout to start the timeout process
+    resetTimeout();
+
+    // Setup event listeners to reset the timeout on user activity
+    const handleUserActivity = () => resetTimeout();
+    window.addEventListener('mousemove', handleUserActivity);
+    window.addEventListener('keypress', handleUserActivity);
+    window.addEventListener('scroll', handleUserActivity);
+
+    // Cleanup on component unmount
+    return () => {
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current);
+      }
+      window.removeEventListener('mousemove', handleUserActivity);
+      window.removeEventListener('keypress', handleUserActivity);
+      window.removeEventListener('scroll', handleUserActivity);
+    };
+  }, [isAutoReloadEnabled]);
+
+  const handleAutoReloadChange = (checked: boolean) => {
+    setIsAutoReloadEnabled(checked);
+  };
+
   //@ts-ignore
   const path = children.props.childProp.segment === "__PAGE__" ? "tong-quan-thi-truong" : children.props.childProp.segment
 
@@ -113,22 +155,22 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
   const sider_menu = [
     {
       label: (
-        <a href="/tong-quan-thi-truong" onClick={(e) => {
+        <a href="/test/tong-quan-thi-truong" onClick={(e) => {
           e.preventDefault(); // Ngăn chặn sự kiện mặc định của thẻ <a>
-          router.push('/tong-quan-thi-truong');
+          router.push('/test/tong-quan-thi-truong');
         }}>
           Tổng quan thị trường
         </a>
       ),
       key: 'tong-quan-thi-truong',
-      icon: <FundViewOutlined style={{ fontSize: '20px', marginLeft: '-1px' }} />
+      icon: <AppstoreOutlined style={{ fontSize: '20px', marginLeft: '-1px' }} />
     },
     {
       label: (
-        <a href="/dong-tien-thi-truong" onClick={(e) => {
+        <a href="/test/dong-tien-thi-truong" onClick={(e) => {
           e.preventDefault();
           if (authState) {
-            router.push('/dong-tien-thi-truong')
+            router.push('/test/dong-tien-thi-truong')
           } else {
             setSignInModalOpen(true)
             notification.warning({
@@ -141,14 +183,14 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
         </a>
       ),
       key: 'dong-tien-thi-truong',
-      icon: <LineChartOutlined style={{ fontSize: '18px', marginLeft: '-1px' }} />,
+      icon: <FundViewOutlined style={{ fontSize: '18px', marginLeft: '-1px' }} />,
     },
     {
       label: (
-        <a href="/dong-tien-nhom-nganh" onClick={(e) => {
+        <a href="/test/tra-cuu-nhom-co-phieu" onClick={(e) => {
           e.preventDefault();
           if (authState) {
-            router.push('/dong-tien-nhom-nganh')
+            router.push('/test/tra-cuu-nhom-co-phieu')
           } else {
             setSignInModalOpen(true)
             notification.warning({
@@ -157,18 +199,38 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
             })
           }
         }} >
-          Dòng tiền ngành
+          Tra cứu nhóm cổ phiếu
         </a>
       ),
-      key: 'dong-tien-nhom-nganh',
+      key: 'tra-cuu-nhom-co-phieu',
       icon: <BarChartOutlined style={{ fontSize: '18px', marginLeft: '-1px' }} />,
     },
     {
       label: (
-        <a href="/bo-loc-co-phieu" onClick={(e) => {
+        <a href="/test/tra-cuu-co-phieu" onClick={(e) => {
           e.preventDefault();
           if (authState) {
-            router.push('/bo-loc-co-phieu')
+            router.push('/test/tra-cuu-co-phieu')
+          } else {
+            setSignInModalOpen(true)
+            notification.warning({
+              message: "Không có quyền truy cập",
+              description: "Bạn cần đăng nhập để xem nội dung này"
+            })
+          }
+        }} >
+          Tra cứu cổ phiếu
+        </a>
+      ),
+      key: 'tra-cuu-co-phieu',
+      icon: <LineChartOutlined style={{ fontSize: '18px', marginLeft: '-1px' }} />,
+    },
+    {
+      label: (
+        <a href="/test/bo-loc-co-phieu" onClick={(e) => {
+          e.preventDefault();
+          if (authState) {
+            router.push('/test/bo-loc-co-phieu')
           } else {
             setSignInModalOpen(true)
             notification.warning({
@@ -289,25 +351,43 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
               defaultSelectedKeys={[path]}
               items={sider_menu}
             />
-            <div>
+            <div style={{
+              marginTop: `calc(100vh - 150px - ${5 * 55}px`
+            }}
+            >
               {showLogout && (
-                <Button
-                  type="text"
-                  icon={<LogoutOutlined />}
-                  onClick={async () => {
-                    dispatch(resetAuthState())
-                    signOut(authInfo.access_token)
-                  }}
-                  style={{
-                    fontSize: '14px',
-                    height: "50px",
-                    color: '#dfdfdf',
-                    marginLeft: collapsed ? '8px' : '13px',
-                    marginTop: `calc(100vh - 120px - ${4 * 55}px`
-                  }}
-                >
-                  {collapsed ? '' : 'Đăng xuất'}
-                </Button>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+                  <Button
+                    type="text"
+                    icon={<LogoutOutlined />}
+                    onClick={async () => {
+                      dispatch(resetAuthState())
+                      signOut(authInfo.access_token)
+                    }}
+                    style={{
+                      fontSize: '14px',
+                      height: "50px",
+                      color: '#dfdfdf',
+                      marginLeft: collapsed ? '11px' : '40px',
+                    }}
+                  >
+                    {collapsed ? '' : 'Đăng xuất'}
+                  </Button>
+                  <Button
+                    icon={<ReloadOutlined style={{}} />}
+                    onClick={() => { isAutoReloadEnabled ? handleAutoReloadChange(false) : handleAutoReloadChange(true) }}
+                    style={{
+                      fontSize: '14px',
+                      height: "30px",
+                      color: '#dfdfdf',
+                      marginLeft: collapsed ? '11px' : '40px',
+                      border: '0px',
+                      background: isAutoReloadEnabled ? '#1677ff' : '#fb4c4d'
+                    }}
+                  >
+                    {collapsed ? '' : 'Auto reload'}
+                  </Button>
+                </div>
               )}
             </div>
           </Sider>
