@@ -13,7 +13,6 @@ import {
   ShoppingCartOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Button, Avatar, notification } from 'antd';
-import { sendRequest } from '@/utlis/api';
 import { useRouter } from 'next/navigation';
 import AuthSignInModal from '@/components/auth/signin.modal';
 import AuthSignUpModal from '@/components/auth/signup.modal';
