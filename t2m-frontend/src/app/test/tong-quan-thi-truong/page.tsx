@@ -24,7 +24,7 @@ const Page1 = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowOverlay(false);
-    }, 1500);
+    }, 2000);
 
     window.addEventListener('resize', updateIframeSize);
     updateIframeSize();
