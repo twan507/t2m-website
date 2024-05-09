@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 const Page1 = () => {
   const [showOverlay, setShowOverlay] = useState(true);
 
-  const [iframeHeight, setIframeHeight] = useState(2150);
+  const [iframeHeight, setIframeHeight] = useState(2590);
   const iframeWidth = 1300
 
   const updateIframeSize = () => {
@@ -24,7 +24,7 @@ const Page1 = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowOverlay(false);
-    }, 2000);
+    }, 4000);
 
     window.addEventListener('resize', updateIframeSize);
     updateIframeSize();

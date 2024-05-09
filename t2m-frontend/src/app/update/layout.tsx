@@ -78,7 +78,7 @@ const Homelayout = ({ children }: React.PropsWithChildren) => {
         if (isAutoReloadEnabled) {
           window.location.reload();
         }
-      }, 60000);  // 60000 ms = 1 minute
+      }, 120000);  // 60000 ms = 1 minute
     };
 
     // Immediately reset timeout to start the timeout process

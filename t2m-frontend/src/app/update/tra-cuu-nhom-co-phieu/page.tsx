@@ -38,7 +38,7 @@ const Page3 = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowOverlay(false);
-    }, 1500);
+    }, 3000);
 
     window.addEventListener('resize', updateIframeSize);
     updateIframeSize(); // Gọi ngay khi component mount để đảm bảo kích thước iframe được điều chỉnh ngay lập tức

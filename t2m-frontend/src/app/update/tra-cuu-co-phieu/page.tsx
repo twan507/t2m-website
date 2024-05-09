@@ -18,7 +18,7 @@ const Page4 = () => {
 
   const [showOverlay, setShowOverlay] = useState(true);
 
-  const [iframeHeight, setIframeHeight] = useState(2280);
+  const [iframeHeight, setIframeHeight] = useState(2290);
   const iframeWidth = 1300
 
   const updateIframeSize = () => {
@@ -38,7 +38,7 @@ const Page4 = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowOverlay(false);
-    }, 1500);
+    }, 3000);
 
     window.addEventListener('resize', updateIframeSize);
     updateIframeSize(); // Gọi ngay khi component mount để đảm bảo kích thước iframe được điều chỉnh ngay lập tức
