@@ -4,8 +4,12 @@ import './globals.css'
 import ReduxProvider from '@/redux/provider';
 
 export const metadata: Metadata = {
-  title: 'T2M Invest',
-  description: 'Định vị dòng tiền chứng khoán',
+  openGraph: {
+    title: 'T2M Invest',
+    description: 'Định vị dòng tiền chứng khoán',
+    type: 'website',
+    images: [`https://i.imgur.com/9lRPcqt.png`],
+  }
 }
 
 export default function RootLayout({ children, }: { children: React.ReactNode }) {
@@ -14,11 +18,11 @@ export default function RootLayout({ children, }: { children: React.ReactNode })
     <html lang="en">
       <body>
         <AntdRegistry>
-            <ReduxProvider>
-              <div>
-                {children}
-              </div>
-            </ReduxProvider>
+          <ReduxProvider>
+            <div>
+              {children}
+            </div>
+          </ReduxProvider>
         </AntdRegistry>
       </body>
     </html>

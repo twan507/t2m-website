@@ -3,11 +3,6 @@
 
 // module.exports = nextConfig
 
-// const nextConfig  = {
-//     output: "export",
-//     distDir: "dist",
-// }
-
 
 /** @type {import('next').NextConfig} */
 
